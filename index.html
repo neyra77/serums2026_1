@@ -1,10 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SERUMS 2025-I — Plazas Medicina</title>
+<title>SERUMS 2026-I — Plazas Medicina</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
 
@@ -16,9 +15,10 @@
     --green:   #10b981;
     --amber:   #f59e0b;
     --red:     #ef4444;
+    --purple:  #a855f7;
     --text:    #e2e8f0;
     --muted:   #64748b;
-    --selection-bg: #132a24;
+    --sel-bg:  #132a24;
     --mono:    'IBM Plex Mono', monospace;
     --sans:    'IBM Plex Sans', sans-serif;
     --header-h: 56px;
@@ -28,199 +28,323 @@
   html, body { height: 100%; overflow: hidden; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; }
 
-  #load-zone { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); z-index: 300; }
-  .spinner { border: 3px solid var(--border); border-top: 3px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 15px; }
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  /* ════ SPINNER ════ */
+  #load-zone { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); z-index: 300; gap: 14px; }
+  .spinner { border: 3px solid var(--border); border-top: 3px solid var(--accent); border-radius: 50%; width: 32px; height: 32px; animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ════ HEADER ════ */
   header { height: var(--header-h); background: var(--surface); border-bottom: 1px solid var(--border); display: none; align-items: center; padding: 0 16px; gap: 12px; position: fixed; top: 0; left: 0; right: 0; z-index: 200; }
-  .logo { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); }
+  .logo { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); white-space: nowrap; }
   .header-title { flex: 1; min-width: 0; }
-  .header-title h1 { font-size: 14px; font-weight: 600; }
-  
-  .yape-widget { display: flex; align-items: center; gap: 6px; border: 1px solid rgba(168,85,247,0.4); border-radius: 6px; padding: 4px 10px; cursor: pointer; background: rgba(168,85,247,0.1); transition: background 0.2s; }
-  .yw-label { font-family: var(--mono); font-size: 10px; font-weight: 600; color: #d8b4fe; }
+  .header-title h1 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .src-link { color: var(--muted); font-size: 11px; font-family: var(--mono); text-decoration: none; white-space: nowrap; }
+  .src-link:hover { color: var(--text); }
+  .yape-btn { display: flex; align-items: center; gap: 5px; border: 1px solid rgba(168,85,247,0.4); border-radius: 6px; padding: 5px 10px; cursor: pointer; background: rgba(168,85,247,0.1); transition: background 0.2s; white-space: nowrap; }
+  .yape-btn span { font-family: var(--mono); font-size: 10px; font-weight: 600; color: #d8b4fe; }
+  @media (max-width: 600px) { .logo { display: none; } .src-link { display: none; } }
 
+  /* ════ APP SHELL ════ */
   #app { display: none; flex-direction: column; position: fixed; inset: 0; padding-top: var(--header-h); }
-  
-  #filter-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
-  .filter-group { display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
-  .filter-group label { font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase; }
-  .filter-group select { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 10px; font-size: 13px; outline: none; cursor: pointer; }
 
-  #stats-bar { background: var(--bg); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; gap: 20px; align-items: center; }
-  .stat .lbl { font-family: var(--mono); font-size: 9px; color: var(--muted); display: block; }
+  /* ════ MOBILE SEARCH ════ */
+  #mobile-search { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 12px 0; }
+  #mobile-search input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--sans); font-size: 16px; padding: 10px 14px; outline: none; -webkit-appearance: none; transition: border-color 0.15s; }
+  #mobile-search input:focus { border-color: var(--accent); }
+  @media (max-width: 768px) { #mobile-search { display: block; } }
+
+  /* ════ QUICK CHIPS ════ */
+  #quick-chips { display: none; padding: 8px 12px 10px; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; gap: 6px; }
+  #quick-chips::-webkit-scrollbar { display: none; }
+  .qchip { display: inline-flex; align-items: center; font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--muted); white-space: nowrap; touch-action: manipulation; transition: all 0.15s; user-select: none; }
+  .qchip.active { border-color: transparent; color: #fff; }
+  .qchip.active.c-rem  { background: #10b981; }
+  .qchip.active.c-eqv  { background: #3b82f6; }
+  .qchip.active.c-gd1  { background: #059669; }
+  .qchip.active.c-gd2  { background: #2563eb; }
+  .qchip.active.c-gd3  { background: #d97706; }
+  .qchip.active.c-gd4  { background: #dc2626; }
+  .qchip.active.c-gd5  { background: #7c3aed; }
+  .qchip.active.c-zaf  { background: #b45309; }
+  @media (max-width: 768px) { #quick-chips { display: flex; } }
+
+  /* ════ FILTER TOGGLE (mobile) ════ */
+  #filter-toggle { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 16px; align-items: center; justify-content: space-between; cursor: pointer; touch-action: manipulation; }
+  #filter-toggle .ft-l { font-size: 13px; font-weight: 600; }
+  #filter-toggle .ft-r { display: flex; align-items: center; gap: 8px; }
+  #active-count { font-family: var(--mono); font-size: 11px; color: var(--amber); background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); padding: 2px 7px; border-radius: 3px; display: none; }
+  #f-arrow { font-size: 11px; color: var(--muted); transition: transform 0.2s; }
+  #f-arrow.open { transform: rotate(180deg); }
+  @media (max-width: 768px) { #filter-toggle { display: flex; } }
+
+  /* ════ FILTER BAR ════ */
+  #filter-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+  @media (min-width: 769px) { #filter-bar { max-height: 200px !important; } }
+  @media (max-width: 768px) { #filter-bar { max-height: 0; padding-top: 0; padding-bottom: 0; } #filter-bar.open { max-height: 400px; padding: 12px 16px; } }
+  .fg { display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
+  .fg label { font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .fg select { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: var(--sans); font-size: 14px; padding: 8px 10px; height: 38px; outline: none; -webkit-appearance: none; appearance: none; width: 100%; transition: border-color 0.15s; }
+  .fg select:focus { border-color: var(--accent); }
+  .btn-reset { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 8px 14px; font-size: 12px; cursor: pointer; height: 38px; align-self: flex-end; transition: border-color 0.15s, color 0.15s; touch-action: manipulation; }
+  .btn-reset:hover, .btn-reset:active { border-color: var(--red); color: var(--red); }
+  @media (max-width: 768px) { .fg { min-width: calc(50% - 5px); flex: 1 1 calc(50% - 5px); } .btn-reset { width: 100%; } }
+
+  /* ════ STATS BAR ════ */
+  #stats-bar { background: var(--bg); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; gap: 20px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 0; }
+  #stats-bar::-webkit-scrollbar { display: none; }
+  .stat { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+  .stat .lbl { font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
   .stat .val { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--accent); }
-  #btn-view-sel { font-family: var(--mono); font-size: 11px; font-weight: 600; background: var(--accent); color: #fff; border: none; border-radius: 5px; padding: 6px 12px; cursor: pointer; }
+  #sel-controls { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  #sel-count-lbl { font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+  #btn-view-sel { font-family: var(--mono); font-size: 11px; font-weight: 600; background: var(--accent); color: #fff; border: none; border-radius: 5px; padding: 6px 12px; cursor: pointer; touch-action: manipulation; white-space: nowrap; }
 
-  #table-wrap { flex: 1; overflow: auto; padding: 0 32px; } 
-  table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1350px; margin: 0 auto; }
-  thead th { position: sticky; top: 0; z-index: 10; background: #1a1f2e; padding: 12px; text-align: left; font-family: var(--mono); font-size: 10px; color: var(--muted); border-bottom: 2px solid var(--border); cursor: pointer; }
-  
-  /* Column widths adjusted for new order */
-  .col-plz  { width: 85px; }
-  .col-est  { width: 280px; }
-  .col-tipo { width: 95px; }
-  .col-gd   { width: 60px; }
+  /* ════ TABLE (desktop) ════ */
+  #table-wrap { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1100px; font-size: 13px; }
+  thead th { position: sticky; top: 0; z-index: 10; background: #1a1f2e; padding: 10px 12px; text-align: left; font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border); cursor: pointer; white-space: nowrap; user-select: none; transition: color 0.15s; }
+  thead th:hover { color: var(--text); }
+  thead th.sort-asc::after  { content: ' ▲'; color: var(--accent); }
+  thead th.sort-desc::after { content: ' ▼'; color: var(--accent); }
+  .col-tipo { width: 80px; }
+  .col-est  { width: 260px; }
   .col-dep  { width: 110px; }
   .col-prov { width: 110px; }
-  .col-dist { width: 110px; }
+  .col-gd   { width: 55px; }
+  .col-cat  { width: 65px; }
   .col-pres { width: 130px; }
-  .col-cat  { width: 70px; }
-  .col-zaf  { width: 55px; }
-  .col-ze   { width: 55px; }
-  .col-chk  { width: 50px; text-align: center; }
+  .col-zaf  { width: 50px; }
+  .col-ze   { width: 50px; }
+  .col-plz  { width: 80px; }
+  .col-chk  { width: 46px; text-align: center; }
+  tbody tr { border-bottom: 1px solid rgba(37,42,54,0.8); cursor: pointer; transition: background 0.1s; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  tbody tr.sel-row { background: var(--sel-bg); }
+  td { padding: 9px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+  td.t-name  { font-weight: 500; color: var(--text); }
+  td.t-geo   { color: var(--muted); font-size: 12px; }
+  td.t-mono  { font-family: var(--mono); font-size: 12px; }
+  td.t-pres  { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  td.t-plz   { font-family: var(--mono); font-weight: 700; color: var(--accent); text-align: center; }
+  td.t-zaf   { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--amber); text-align: center; }
+  td.t-chk   { text-align: center; }
 
-  tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; }
-  tbody tr:hover { background: rgba(255,255,255,0.02); }
-  tbody tr.sel-row { background: var(--selection-bg); }
-  td { padding: 10px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.78rem; }
+  @media (max-width: 768px) { table, thead, tbody, tr, th, td { display: none !important; } }
 
-  #sel-panel { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 350; display: none; align-items: flex-end; transition: background 0.3s ease; }
-  #sel-panel.show { display: flex; background: rgba(0,0,0,0.7); }
-  .sp-inner { background: var(--surface); width: 100%; max-height: 85vh; border-radius: 16px 16px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  #sel-panel.show .sp-inner { transform: translateY(0); }
-  .sp-hdr { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
+  /* ════ MOBILE CARDS ════ */
+  .m-card { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 16px; cursor: pointer; transition: background 0.1s; }
+  .m-card.sel-row { background: var(--sel-bg); border-left: 3px solid var(--green); }
+  .m-card:active { background: rgba(59,130,246,0.07); }
+  .mc-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .mc-name { font-size: 14px; font-weight: 600; flex: 1; line-height: 1.3; }
+  .mc-plz { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+  .mc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .mc-chip { font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .mc-detail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mc-detail.hidden { display: none !important; }
+  .mf { display: flex; flex-direction: column; gap: 2px; }
+  .mfl { font-size: 10px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
+  .mfv { font-size: 13px; }
+  @media (max-width: 768px) { .m-card { display: block; } }
+  @media (min-width: 769px) { .m-card { display: none !important; } }
 
-  #yape-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
-  #yape-overlay.show { display: flex; }
-  .yape-card { background: var(--surface); padding: 32px; border-radius: 24px; text-align: center; border: 1px solid var(--border); max-width: 340px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-  
-  .badge { padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 10px; font-weight: 600; }
-  
-  /* Tipo Badges Updated */
-  .b-remun { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
-  .b-equiv { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
-  
-  /* GD Badges Updated */
+  /* ════ BADGES ════ */
+  .badge { padding: 2px 7px; border-radius: 4px; font-family: var(--mono); font-size: 11px; font-weight: 600; }
+  .b-rem { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+  .b-eqv { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
   .b-gd1 { background: rgba(16,185,129,0.12); color: #6ee7b7; }
   .b-gd2 { background: rgba(59,130,246,0.12); color: #93c5fd; }
   .b-gd3 { background: rgba(245,158,11,0.12); color: #fcd34d; }
   .b-gd4 { background: rgba(239,68,68,0.12);  color: #fca5a5; }
   .b-gd5 { background: rgba(139,92,246,0.12); color: #c4b5fd; }
+
+  /* ════ SEL PANEL ════ */
+  #sel-panel { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 350; display: none; align-items: flex-end; transition: background 0.3s; }
+  #sel-panel.show { display: flex; background: rgba(0,0,0,0.72); }
+  .sp-inner { background: var(--surface); width: 100%; max-height: 85vh; border-radius: 16px 16px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  #sel-panel.show .sp-inner { transform: translateY(0); }
+  .sp-hdr { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sp-hdr h2 { font-size: 15px; }
+  .sp-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .sp-btn { font-size: 12px; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-family: var(--sans); font-weight: 600; touch-action: manipulation; }
+  .sp-btn-txt  { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .sp-btn-pdf  { background: var(--accent); color: #fff; border: none; }
+  .sp-btn-clr  { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid var(--red); }
+  .sp-btn-cls  { background: none; border: none; color: var(--muted); font-size: 20px; }
+  .sp-body { overflow: auto; flex: 1; padding: 0 20px 20px; -webkit-overflow-scrolling: touch; }
+  .sp-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
+  .sp-table th { padding: 10px 12px; font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; border-bottom: 1px solid var(--border); text-align: left; }
+  .sp-table td { padding: 10px 12px; border-bottom: 1px solid rgba(37,42,54,0.6); vertical-align: middle; }
+
+  /* ════ YAPE OVERLAY ════ */
+  #yape-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+  #yape-overlay.show { display: flex; }
+  .yc { background: var(--surface); padding: 32px; border-radius: 20px; text-align: center; border: 1px solid var(--border); max-width: 320px; width: 100%; }
+  .yc p { margin-bottom: 16px; font-size: 14px; line-height: 1.5; color: var(--text); }
+  .yc img { width: 200px; height: 200px; border-radius: 12px; margin-bottom: 20px; background: #fff; border: 4px solid #fff; }
+
+  #no-results { display: none; text-align: center; padding: 60px 20px; color: var(--muted); font-family: var(--mono); }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
 <body>
 
 <div id="load-zone">
   <div class="spinner"></div>
-  <div style="font-family:var(--mono); color:var(--muted); font-size:12px;">Cargando Plazas Medicina 2025-I...</div>
+  <div style="font-family:var(--mono); color:var(--muted); font-size:12px;">Cargando Plazas Medicina...</div>
 </div>
 
 <header id="main-header">
-  <div class="logo">SERUMS 2025-I</div>
-  <div class="header-title"><h1>Explorador de Plazas Medicina</h1></div>
-  <a href="https://www.gob.pe/institucion/minsa/informes-publicaciones/6675608-oferta-de-plazas-serums-remuneradas-y-equivalentes-2025-i" target="_blank" style="color:white; font-weight:800; font-size:12px; margin-right:15px; text-decoration:none;"><b>Fuente MINSA ↗</b></a>
-  <div class="yape-widget" onclick="showYape()">
-    <span style="font-size:14px; color:#a855f7;">💜</span>
-    <span class="yw-label">Donar por Yape</span>
+  <div class="logo">SERUMS 2026-I</div>
+  <div class="header-title"><h1>Explorador de Plazas — Medicina</h1></div>
+  <a class="src-link" href="https://www.gob.pe/minsa" target="_blank">Fuente MINSA ↗</a>
+  <div class="yape-btn" onclick="showYape()">
+    <span style="font-size:14px;">💜</span>
+    <span>Donar Yape</span>
   </div>
 </header>
 
 <div id="app">
-  <div id="filter-bar">
-    <div class="filter-group"><label>Tipo</label><select id="f-tipo"><option value="">Todos</option><option value="rem">Remunerado</option><option value="equiv">Equivalente</option></select></div>
-    <div class="filter-group"><label>Departamento</label><select id="f-dep"><option value="">Todos</option></select></div>
-    <div class="filter-group"><label>GD</label><select id="f-gd"><option value="">Todos</option></select></div>
-    <div class="filter-group"><label>Presupuesto</label><select id="f-pres"><option value="">Todos</option></select></div>
-    <div class="filter-group"><label>ZAF</label><select id="f-zaf"><option value="">Todos</option><option value="SI">SI</option><option value="NO">NO</option></select></div>
-    <button style="background:none; border:1px solid var(--border); color:var(--muted); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px;" onclick="resetFilters()">Limpiar Filtros</button>
+
+  <!-- Mobile search -->
+  <div id="mobile-search">
+    <input type="text" id="f-search-mobile" placeholder="🔍  Buscar establecimiento o distrito..." autocomplete="off" autocorrect="off" spellcheck="false">
   </div>
 
-  <div id="stats-bar">
-    <div class="stat"><span class="lbl">Establecimientos</span><span class="val" id="s-total">0</span></div>
-    <div class="stat"><span class="lbl">Número de Plazas</span><span class="val" id="s-plazas" style="color:var(--green)">0</span></div>
-    <div class="stat"><span class="lbl">Remunerado</span><span class="val" id="s-rem" style="color:#10b981">0</span></div>
-    <div class="stat"><span class="lbl">Equivalente</span><span class="val" id="s-eq" style="color:#3b82f6">0</span></div>
-    <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
-      <span style="font-family:var(--mono); font-size:11px; color:var(--muted);">Seleccionadas: <b id="sel-n">0</b></span>
-      <button id="btn-view-sel" onclick="showSelPanel()">Ver Selección ↑</button>
+  <!-- Quick chips -->
+  <div id="quick-chips">
+    <span class="qchip c-rem" onclick="toggleChip(this,'tipo','rem')">Remunerado</span>
+    <span class="qchip c-eqv" onclick="toggleChip(this,'tipo','equiv')">Equivalente</span>
+    <span class="qchip c-gd1" onclick="toggleChip(this,'gd','GD-1')">GD-1</span>
+    <span class="qchip c-gd2" onclick="toggleChip(this,'gd','GD-2')">GD-2</span>
+    <span class="qchip c-gd3" onclick="toggleChip(this,'gd','GD-3')">GD-3</span>
+    <span class="qchip c-gd4" onclick="toggleChip(this,'gd','GD-4')">GD-4</span>
+    <span class="qchip c-gd5" onclick="toggleChip(this,'gd','GD-5')">GD-5</span>
+    <span class="qchip c-zaf" onclick="toggleChip(this,'zaf','SI')">ZAF ✦</span>
+  </div>
+
+  <!-- Filter toggle -->
+  <div id="filter-toggle" onclick="toggleFilters()">
+    <span class="ft-l">⚙ Filtros avanzados</span>
+    <div class="ft-r">
+      <span id="active-count"></span>
+      <span id="f-arrow">▼</span>
     </div>
   </div>
 
+  <!-- Filter bar -->
+  <div id="filter-bar">
+    <div class="fg"><label>Tipo</label>
+      <select id="f-tipo"><option value="">Todos</option><option value="rem">Remunerado</option><option value="equiv">Equivalente</option></select>
+    </div>
+    <div class="fg"><label>Departamento</label><select id="f-dep"><option value="">Todos</option></select></div>
+    <div class="fg"><label>GD</label><select id="f-gd"><option value="">Todos</option></select></div>
+    <div class="fg"><label>Presupuesto</label><select id="f-pres"><option value="">Todos</option></select></div>
+    <div class="fg"><label>Categoría</label><select id="f-cat"><option value="">Todas</option></select></div>
+    <div class="fg"><label>ZAF</label>
+      <select id="f-zaf"><option value="">Todos</option><option value="SI">SI</option><option value="NO">NO</option></select>
+    </div>
+    <button class="btn-reset" onclick="resetFilters()">✕ Limpiar</button>
+  </div>
+
+  <!-- Stats bar -->
+  <div id="stats-bar">
+    <div class="stat"><span class="lbl">Lugares</span><span class="val" id="s-total">0</span></div>
+    <div class="stat"><span class="lbl">N° Plazas</span><span class="val" id="s-plazas" style="color:var(--green)">0</span></div>
+    <div id="sel-controls">
+      <span id="sel-count-lbl">Sel: <b id="sel-n">0</b></span>
+      <button id="btn-view-sel" onclick="showSelPanel()">Ver selección ↑</button>
+    </div>
+  </div>
+
+  <!-- Content area -->
   <div id="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-plz" onclick="sortBy('N° PLAZAS')">N. Plazas</th>
-          <th class="col-est" onclick="sortBy('NOMBRE DE ESTABLECIMIENTO')">Establecimiento</th>
-          <th class="col-tipo" onclick="sortBy('tipo')">Modalidad</th>
-          <th class="col-gd" onclick="sortBy('GRADO DE DIFICULTAD')">GD</th>
-          <th class="col-dep" onclick="sortBy('DEPARTAMENTO')">Departamento</th>
-          <th class="col-prov" onclick="sortBy('PROVINCIA')">Provincia</th>
-          <th class="col-dist" onclick="sortBy('DISTRITO')">Distrito</th>
-          <th class="col-pres" onclick="sortBy('PRESUPUESTO')">Presupuesto</th>
-          <th class="col-cat" onclick="sortBy('CATEGORIA')">Cat.</th>
-          <th class="col-zaf" onclick="sortBy('ZAF (*)')">ZAF</th>
-          <th class="col-ze" onclick="sortBy('ZE (**)')">ZE</th>
-          <th class="col-chk"><input type="checkbox" id="master-chk" onclick="toggleAllFiltered(event)"></th>
-        </tr>
-      </thead>
+    <!-- Desktop table -->
+    <table id="data-table">
+      <thead><tr>
+        <th class="col-tipo" onclick="sortBy('tipo')" data-col="tipo">Tipo</th>
+        <th class="col-est"  onclick="sortBy('NOMBRE DE ESTABLECIMIENTO')" data-col="NOMBRE DE ESTABLECIMIENTO">Establecimiento</th>
+        <th class="col-dep"  onclick="sortBy('DEPARTAMENTO')" data-col="DEPARTAMENTO">Dpto</th>
+        <th class="col-prov" onclick="sortBy('PROVINCIA')" data-col="PROVINCIA">Provincia</th>
+        <th class="col-gd"   onclick="sortBy('GRADO DE DIFICULTAD')" data-col="GRADO DE DIFICULTAD">GD</th>
+        <th class="col-cat"  onclick="sortBy('CATEGORIA')" data-col="CATEGORIA">Cat.</th>
+        <th class="col-pres" onclick="sortBy('PRESUPUESTO')" data-col="PRESUPUESTO">Presupuesto</th>
+        <th class="col-zaf"  onclick="sortBy('ZAF (*)')" data-col="ZAF (*)">ZAF</th>
+        <th class="col-ze"   onclick="sortBy('ZE (**)')" data-col="ZE (**)">ZE</th>
+        <th class="col-plz"  onclick="sortBy('N° PLAZAS')" data-col="N° PLAZAS">Plazas</th>
+        <th class="col-chk"><input type="checkbox" id="master-chk" onclick="toggleAllFiltered(event)"></th>
+      </tr></thead>
       <tbody id="table-body"></tbody>
     </table>
+    <!-- Mobile cards -->
+    <div id="cards-body"></div>
+    <div id="no-results">Sin resultados para los filtros seleccionados.</div>
   </div>
 </div>
 
+<!-- Selection panel -->
 <div id="sel-panel" onclick="hideSelPanel(event)">
   <div class="sp-inner" onclick="event.stopPropagation()">
     <div class="sp-hdr">
-      <h2 style="font-size:16px;">Mi Selección (<span id="sp-cnt">0</span>)</h2>
-      <div style="margin-left:auto; display:flex; gap:8px;">
-        <button onclick="exportTXT()" style="background:var(--surface); color:var(--text); border:1px solid var(--border); padding:8px 12px; border-radius:6px; cursor:pointer; font-size:11px;">Guardar como TXT</button>
-        <button onclick="openPDFTab()" style="background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-size:11px;">Guardar como PDF</button>
-        <button onclick="clearAllSelection()" style="background:rgba(239,68,68,0.1); color:var(--red); border:1px solid var(--red); padding:8px 12px; border-radius:6px; cursor:pointer; font-size:11px;">Limpiar selecciones</button>
-        <button onclick="hideSelPanel()" style="background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; margin-left:10px;">✕</button>
+      <h2>Mi Selección (<span id="sp-cnt">0</span>)</h2>
+      <div class="sp-actions">
+        <button class="sp-btn sp-btn-txt" onclick="exportTXT()">Guardar TXT</button>
+        <button class="sp-btn sp-btn-pdf" onclick="openPDFTab()">Guardar PDF</button>
+        <button class="sp-btn sp-btn-clr" onclick="clearAllSelection()">Limpiar</button>
+        <button class="sp-btn sp-btn-cls" onclick="hideSelPanel()">✕</button>
       </div>
     </div>
-    <div style="overflow:auto; flex:1; padding:0 20px 20px;">
-      <table style="min-width:100%">
-        <thead>
-          <tr>
-            <th style="width:25%">Establecimiento</th>
-            <th>Departamento</th>
-            <th>Provincia</th>
-            <th>GD/Cat</th>
-            <th>Presupuesto</th>
-            <th>ZAF/ZE</th>
-            <th>Plz</th>
-            <th></th>
-          </tr>
-        </thead>
+    <div class="sp-body">
+      <table class="sp-table">
+        <thead><tr>
+          <th style="width:30%">Establecimiento</th>
+          <th>Tipo</th><th>Departamento</th><th>Provincia</th>
+          <th>GD / Cat</th><th>Presupuesto</th><th>ZAF/ZE</th>
+          <th style="text-align:right">Plz</th><th></th>
+        </tr></thead>
         <tbody id="sp-body"></tbody>
       </table>
     </div>
   </div>
 </div>
 
+<!-- Yape overlay -->
 <div id="yape-overlay" onclick="hideYape(event)">
-  <div class="yape-card" onclick="event.stopPropagation()">
-    <p style="margin-bottom:12px; font-weight:600; font-size:15px; color:#e2e8f0; line-height:1.4;">Si te gustó el proyecto, apóyame con 0.50 o 1 sol. ¡Graciass!</p>
-    <img src="myYapeQR.jpg" style="width:200px; height:200px; border-radius:12px; margin-bottom:20px; background:#fff; border:4px solid #fff;" alt="QR Yape">
-    <div>
-      <button onclick="hideYape()" style="background:var(--border); color:var(--text); border:none; padding:10px 24px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;">Cerrar</button>
-    </div>
+  <div class="yc" onclick="event.stopPropagation()">
+    <p>Si te fue útil, apóyame con<br><strong>0.50 o 1 sol</strong> por Yape 💜</p>
+    <img src="myYapeQR.jpg" alt="QR Yape">
+    <br>
+    <button onclick="hideYape()" style="background:var(--border); color:var(--text); border:none; padding:10px 28px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;">Cerrar</button>
   </div>
 </div>
 
 <script>
+const isMobile = () => window.innerWidth <= 768;
+
 let allData = [], filtered = [], selectedKeys = new Set();
 let sortCol = 'DEPARTAMENTO', sortDir = 1;
+let filtersOpen = false;
+const chipState = { tipo: null, gd: null, zaf: null };
 
+// ── Load ─────────────────────────────────────────────────────────────────
 async function loadInitialFiles() {
   const files = [
-    { name: 'medicina_remunerado_plazas.csv', type: 'rem' },
-    { name: 'medicina_equivalente_plazas.csv', type: 'equiv' }
+    { name: 'medicina_remunerado_plazas.csv', tipo: 'rem' },
+    { name: 'medicina_equivalente_plazas.csv', tipo: 'equiv' }
   ];
-
-  for (const file of files) {
+  for (const f of files) {
     try {
-      const response = await fetch(file.name);
-      if (response.ok) {
-        const text = await response.text();
-        parseCSV(text).forEach(r => {
-          if (r.PROFESION === 'MEDICINA') allData.push({ ...r, tipo: file.type });
+      const res = await fetch(f.name);
+      if (res.ok) {
+        parseCSV(await res.text()).forEach(r => {
+          if ((r.PROFESION||'').trim().toUpperCase() === 'MEDICINA')
+            allData.push({ ...r, tipo: f.tipo });
         });
       }
-    } catch (e) { console.error("Error loading " + file.name, e); }
+    } catch(e) { console.error('Error loading ' + f.name, e); }
   }
   initApp();
 }
@@ -228,21 +352,18 @@ async function loadInitialFiles() {
 function parseCSV(text) {
   const lines = text.trim().split(/\r?\n/);
   if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
   return lines.slice(1).map(line => {
-    const vals = [];
-    let cur = '', inQ = false;
-    for (let char of line) {
-      if (char === '"') inQ = !inQ;
-      else if (char === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
-      else cur += char;
+    const vals = []; let cur = '', inQ = false;
+    for (const c of line) {
+      if (c === '"') inQ = !inQ;
+      else if (c === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
+      else cur += c;
     }
     vals.push(cur.trim());
-    return {
-      'PROFESION': vals[0], 'N° PLAZAS': vals[2], 'DEPARTAMENTO': vals[5],
-      'PROVINCIA': vals[6], 'DISTRITO': vals[7], 'GRADO DE DIFICULTAD': vals[8],
-      'CODIGO RENIPRESS MODULAR': vals[9], 'NOMBRE DE ESTABLECIMIENTO': vals[10],
-      'CATEGORIA': vals[11], 'PRESUPUESTO': vals[12], 'ZAF (*)': vals[13], 'ZE (**)': vals[14]
-    };
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i]||'').trim());
+    return obj;
   });
 }
 
@@ -251,169 +372,349 @@ function initApp() {
   document.getElementById('main-header').style.display = 'flex';
   document.getElementById('app').style.display = 'flex';
   populateSelects();
+  attachListeners();
   applyFilters();
 }
 
 function populateSelects() {
   const fill = (id, key) => {
     const sel = document.getElementById(id);
-    [...new Set(allData.map(r => r[key]))].filter(Boolean).sort().forEach(v => sel.add(new Option(v, v)));
+    [...new Set(allData.map(r => r[key]).filter(Boolean))].sort()
+      .forEach(v => sel.add(new Option(v, v)));
   };
-  fill('f-dep', 'DEPARTAMENTO');
-  fill('f-gd', 'GRADO DE DIFICULTAD');
+  fill('f-dep',  'DEPARTAMENTO');
+  fill('f-gd',   'GRADO DE DIFICULTAD');
   fill('f-pres', 'PRESUPUESTO');
-  ['f-tipo', 'f-dep', 'f-gd', 'f-pres', 'f-zaf'].forEach(id => document.getElementById(id).onchange = applyFilters);
+  fill('f-cat',  'CATEGORIA');
 }
 
-function applyFilters() {
-  const f = {
-    tipo: document.getElementById('f-tipo').value,
-    dep: document.getElementById('f-dep').value,
-    gd: document.getElementById('f-gd').value,
-    pres: document.getElementById('f-pres').value,
-    zaf: document.getElementById('f-zaf').value
-  };
-  filtered = allData.filter(r => 
-    (!f.tipo || r.tipo === f.tipo) &&
-    (!f.dep || r.DEPARTAMENTO === f.dep) &&
-    (!f.gd || r['GRADO DE DIFICULTAD'] === f.gd) &&
-    (!f.pres || r.PRESUPUESTO === f.pres) &&
-    (!f.zaf || r['ZAF (*)'] === f.zaf)
+function attachListeners() {
+  ['f-tipo','f-dep','f-gd','f-pres','f-cat','f-zaf'].forEach(id =>
+    document.getElementById(id).onchange = applyFilters
   );
+  document.getElementById('f-search-mobile').addEventListener('input', function() {
+    applyFilters();
+  });
+}
+
+// ── Chips ─────────────────────────────────────────────────────────────────
+function toggleChip(el, type, value) {
+  if (chipState[type] === value) {
+    chipState[type] = null;
+    el.classList.remove('active');
+  } else {
+    document.querySelectorAll(`[onclick*="'${type}'"]`).forEach(c => c.classList.remove('active'));
+    chipState[type] = value;
+    el.classList.add('active');
+  }
+  if (type === 'tipo') document.getElementById('f-tipo').value = chipState.tipo || '';
+  if (type === 'gd')   document.getElementById('f-gd').value   = chipState.gd   || '';
+  if (type === 'zaf')  document.getElementById('f-zaf').value  = chipState.zaf  || '';
+  applyFilters();
+}
+
+// ── Filter toggle ─────────────────────────────────────────────────────────
+function toggleFilters() {
+  filtersOpen = !filtersOpen;
+  document.getElementById('filter-bar').classList.toggle('open', filtersOpen);
+  document.getElementById('f-arrow').classList.toggle('open', filtersOpen);
+}
+
+function countActive() {
+  return ['f-tipo','f-dep','f-gd','f-pres','f-cat','f-zaf']
+    .filter(id => document.getElementById(id).value !== '').length;
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────
+function applyFilters() {
+  const tipo = document.getElementById('f-tipo').value;
+  const dep  = document.getElementById('f-dep').value;
+  const gd   = document.getElementById('f-gd').value;
+  const pres = document.getElementById('f-pres').value;
+  const cat  = document.getElementById('f-cat').value;
+  const zaf  = document.getElementById('f-zaf').value;
+  const q    = document.getElementById('f-search-mobile').value.trim().toUpperCase();
+
+  filtered = allData.filter(r =>
+    (!tipo || r.tipo === tipo) &&
+    (!dep  || r.DEPARTAMENTO === dep) &&
+    (!gd   || r['GRADO DE DIFICULTAD'] === gd) &&
+    (!pres || r.PRESUPUESTO === pres) &&
+    (!cat  || r.CATEGORIA === cat) &&
+    (!zaf  || r['ZAF (*)'] === zaf) &&
+    (!q    || (r['NOMBRE DE ESTABLECIMIENTO']||'').toUpperCase().includes(q) ||
+              (r.DISTRITO||'').toUpperCase().includes(q) ||
+              (r.DEPARTAMENTO||'').toUpperCase().includes(q))
+  );
+
+  const ac = countActive();
+  const acEl = document.getElementById('active-count');
+  acEl.textContent = ac ? ac + ' activos' : '';
+  acEl.style.display = ac ? 'inline' : 'none';
+
   sortData();
-  render();
+  updateStats();
+  renderAll();
   document.getElementById('master-chk').checked = false;
 }
 
+function resetFilters() {
+  ['f-tipo','f-dep','f-gd','f-pres','f-cat','f-zaf'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-search-mobile').value = '';
+  document.querySelectorAll('.qchip').forEach(c => c.classList.remove('active'));
+  chipState.tipo = null; chipState.gd = null; chipState.zaf = null;
+  applyFilters();
+}
+
+// ── Sort ─────────────────────────────────────────────────────────────────
 function sortBy(col) {
   sortDir = sortCol === col ? -sortDir : 1;
   sortCol = col;
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sort-asc','sort-desc');
+    if (th.dataset.col === col) th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+  });
   sortData();
-  render();
+  renderAll();
 }
 
 function sortData() {
-  filtered.sort((a,b) => {
-    let av = a[sortCol] || '', bv = b[sortCol] || '';
+  filtered.sort((a, b) => {
+    let av = a[sortCol]||'', bv = b[sortCol]||'';
     if (sortCol === 'N° PLAZAS') { av = parseInt(av)||0; bv = parseInt(bv)||0; }
     return av < bv ? -sortDir : av > bv ? sortDir : 0;
   });
 }
 
-function rowKey(r) { return `${r.tipo}-${r['CODIGO RENIPRESS MODULAR']}-${r['NOMBRE DE ESTABLECIMIENTO']}`; }
-
-function toggleRow(r) {
-  const key = rowKey(r);
-  if (selectedKeys.has(key)) selectedKeys.delete(key);
-  else selectedKeys.add(key);
-  updateSelectionUI();
-  render();
+// ── Stats ─────────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('s-total').textContent = filtered.length.toLocaleString();
+  document.getElementById('s-plazas').textContent = filtered.reduce((s,r) => s + (parseInt(r['N° PLAZAS'])||0), 0).toLocaleString();
 }
 
-function toggleAllFiltered(e) {
-  e.stopPropagation();
-  const checked = e.target.checked;
-  filtered.forEach(r => {
-    const key = rowKey(r);
-    if (checked) selectedKeys.add(key);
-    else selectedKeys.delete(key);
-  });
-  updateSelectionUI();
-  render();
-}
-
-function updateSelectionUI() {
+function updateSelUI() {
   const n = selectedKeys.size;
   document.getElementById('sel-n').textContent = n;
   document.getElementById('sp-cnt').textContent = n;
 }
 
-function render() {
-  const body = document.getElementById('table-body');
-  body.innerHTML = '';
-  document.getElementById('s-total').textContent = filtered.length;
-  document.getElementById('s-plazas').textContent = filtered.reduce((s,r) => s + (parseInt(r['N° PLAZAS'])||0), 0);
-  document.getElementById('s-rem').textContent = filtered.filter(r=>r.tipo==='rem').length;
-  document.getElementById('s-eq').textContent = filtered.filter(r=>r.tipo==='equiv').length;
+// ── Row key ───────────────────────────────────────────────────────────────
+function rowKey(r) { return `${r.tipo}-${r['CODIGO RENIPRESS MODULAR']}-${r['NOMBRE DE ESTABLECIMIENTO']}`; }
 
-  filtered.slice(0, 250).forEach(r => {
-    const isSel = selectedKeys.has(rowKey(r));
+function toggleRow(r) {
+  const k = rowKey(r);
+  if (selectedKeys.has(k)) selectedKeys.delete(k);
+  else selectedKeys.add(k);
+  updateSelUI();
+  renderAll();
+}
+
+function toggleAllFiltered(e) {
+  e.stopPropagation();
+  filtered.forEach(r => e.target.checked ? selectedKeys.add(rowKey(r)) : selectedKeys.delete(rowKey(r)));
+  updateSelUI();
+  renderAll();
+}
+
+// ── Render ────────────────────────────────────────────────────────────────
+const PAGE = 200;
+let page = 0;
+
+function renderAll() {
+  page = 0;
+  document.getElementById('table-body').innerHTML = '';
+  document.getElementById('cards-body').innerHTML = '';
+  const nr = document.getElementById('no-results');
+  if (!filtered.length) { nr.style.display = 'block'; return; }
+  nr.style.display = 'none';
+  renderPage(true);
+}
+
+function renderPage(reset) {
+  const chunk = filtered.slice(page * PAGE, (page+1) * PAGE);
+  if (isMobile()) renderCards(chunk);
+  else            renderRows(chunk);
+}
+
+function gdBadgeClass(gd) {
+  return {'GD-1':'b-gd1','GD-2':'b-gd2','GD-3':'b-gd3','GD-4':'b-gd4','GD-5':'b-gd5'}[gd]||'';
+}
+
+// Desktop rows
+function renderRows(chunk) {
+  const frag = document.createDocumentFragment();
+  chunk.forEach(r => {
+    const sel = selectedKeys.has(rowKey(r));
     const tr = document.createElement('tr');
-    if (isSel) tr.className = 'sel-row';
+    if (sel) tr.className = 'sel-row';
     tr.onclick = () => toggleRow(r);
-    
-    const gd = r['GRADO DE DIFICULTAD'];
-    const gdClass = `b-gd${gd}`;
-    const tipoLabel = r.tipo === 'rem' ? 'REMUN' : 'EQUIV';
-    const tipoClass = r.tipo === 'rem' ? 'b-remun' : 'b-equiv';
-
+    const tipoBadge = `<span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REM':'EQUIV'}</span>`;
+    const gdBadge   = r['GRADO DE DIFICULTAD'] ? `<span class="badge ${gdBadgeClass(r['GRADO DE DIFICULTAD'])}">${r['GRADO DE DIFICULTAD']}</span>` : '—';
     tr.innerHTML = `
-      <td style="color:var(--accent)">${r['N° PLAZAS']}</td>
-      <td title="${r['NOMBRE DE ESTABLECIMIENTO']}" style="font-weight:700">${r['NOMBRE DE ESTABLECIMIENTO']}</td>
-      <td><span class="badge ${tipoClass}">${tipoLabel}</span></td>
-      <td><span class="badge ${gdClass}">${gd}</span></td>
-      <td style="color:var(--text)">${r.DEPARTAMENTO}</td>
-      <td style="color:var(--muted)">${r.PROVINCIA}</td>
-      <td style="color:var(--muted)">${r.DISTRITO}</td>
-      <td style="font-weight:700">${r.PRESUPUESTO}</td>
-      <td>${r.CATEGORIA}</td>
-      <td style="color:var(--amber)">${r['ZAF (*)'] === 'SI' ? 'SI' : ''}</td>
-      <td style="color:var(--amber)">${r['ZE (**)'] === 'SI' ? 'SI' : ''}</td>
-      <td class="col-chk"><input type="checkbox" ${isSel ? 'checked' : ''} readonly></td>
-    `;
-    body.appendChild(tr);
+      <td>${tipoBadge}</td>
+      <td class="t-name" title="${r['NOMBRE DE ESTABLECIMIENTO']}">${r['NOMBRE DE ESTABLECIMIENTO']||'—'}</td>
+      <td class="t-geo">${r.DEPARTAMENTO||'—'}</td>
+      <td class="t-geo">${r.PROVINCIA||'—'}</td>
+      <td class="t-mono">${gdBadge}</td>
+      <td class="t-mono">${r.CATEGORIA||'—'}</td>
+      <td class="t-pres">${r.PRESUPUESTO||'—'}</td>
+      <td class="t-zaf">${r['ZAF (*)'] === 'SI' ? '✦' : ''}</td>
+      <td class="t-zaf">${r['ZE (**)'] === 'SI' ? '✦' : ''}</td>
+      <td class="t-plz">${r['N° PLAZAS']||'—'}</td>
+      <td class="t-chk"><input type="checkbox" ${sel?'checked':''} readonly onclick="event.stopPropagation()"></td>`;
+    frag.appendChild(tr);
   });
+  document.getElementById('table-body').appendChild(frag);
 }
 
-function showSelPanel() { document.getElementById('sel-panel').style.display = 'flex'; setTimeout(() => document.getElementById('sel-panel').classList.add('show'), 10); renderSelBody(); }
-function hideSelPanel(e) { if (!e || e.target.id === 'sel-panel') { document.getElementById('sel-panel').classList.remove('show'); setTimeout(() => document.getElementById('sel-panel').style.display = 'none', 300); } }
+// Mobile cards
+function renderCards(chunk) {
+  const frag = document.createDocumentFragment();
+  chunk.forEach((r, idx) => {
+    const sel = selectedKeys.has(rowKey(r));
+    const card = document.createElement('div');
+    card.className = 'm-card' + (sel ? ' sel-row' : '');
+    const detId = `mcd-${page*PAGE+idx}`;
+    const gdCls = gdBadgeClass(r['GRADO DE DIFICULTAD']);
+    card.innerHTML = `
+      <div class="mc-top">
+        <div class="mc-name">${r['NOMBRE DE ESTABLECIMIENTO']||'—'}</div>
+        <div class="mc-plz">${r['N° PLAZAS']||'—'}</div>
+      </div>
+      <div class="mc-chips">
+        <span class="mc-chip ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REMUN':'EQUIV'}</span>
+        ${r['GRADO DE DIFICULTAD'] ? `<span class="mc-chip ${gdCls}">${r['GRADO DE DIFICULTAD']}</span>` : ''}
+        <span class="mc-chip" style="background:rgba(255,255,255,0.06);color:var(--text)">${r.DEPARTAMENTO||''}</span>
+        <span class="mc-chip" style="background:rgba(255,255,255,0.04);color:var(--muted)">${r.PRESUPUESTO||''}</span>
+        ${r['ZAF (*)'] === 'SI' ? `<span class="mc-chip" style="background:rgba(245,158,11,0.12);color:#fcd34d">ZAF ✦</span>` : ''}
+        ${r['ZE (**)'] === 'SI' ? `<span class="mc-chip" style="background:rgba(245,158,11,0.12);color:#fcd34d">ZE ✦</span>` : ''}
+      </div>
+      <div class="mc-detail hidden" id="${detId}">
+        <div class="mf"><span class="mfl">Provincia</span><span class="mfv">${r.PROVINCIA||'—'}</span></div>
+        <div class="mf"><span class="mfl">Distrito</span><span class="mfv">${r.DISTRITO||'—'}</span></div>
+        <div class="mf"><span class="mfl">Categoría</span><span class="mfv">${r.CATEGORIA||'—'}</span></div>
+        <div class="mf"><span class="mfl">Cód. RENIPRESS</span><span class="mfv" style="font-family:var(--mono);font-size:12px">${r['CODIGO RENIPRESS MODULAR']||'—'}</span></div>
+        <div class="mf" style="grid-column:1/-1">
+          <span class="mfl">Seleccionar</span>
+          <button onclick="event.stopPropagation();toggleRow(${JSON.stringify(r).replace(/"/g,'&quot;')})" 
+            style="margin-top:4px;padding:8px 16px;border-radius:6px;border:1px solid ${sel?'var(--red)':'var(--green)'};background:${sel?'rgba(239,68,68,0.1)':'rgba(16,185,129,0.1)'};color:${sel?'var(--red)':'var(--green)'};font-weight:600;font-size:12px;cursor:pointer;touch-action:manipulation">
+            ${sel ? '✕ Quitar' : '+ Seleccionar'}
+          </button>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => {
+      document.getElementById(detId).classList.toggle('hidden');
+    });
+    frag.appendChild(card);
+  });
+  document.getElementById('cards-body').appendChild(frag);
+}
 
+// Infinite scroll
+document.getElementById('table-wrap').addEventListener('scroll', function() {
+  if (this.scrollTop + this.clientHeight >= this.scrollHeight - 150) {
+    if ((page+1)*PAGE < filtered.length) { page++; renderPage(false); }
+  }
+});
+
+let lastMobile = isMobile();
+window.addEventListener('resize', () => {
+  const now = isMobile();
+  if (now !== lastMobile) { lastMobile = now; renderAll(); }
+});
+
+// ── Selection panel ───────────────────────────────────────────────────────
+function showSelPanel() {
+  const p = document.getElementById('sel-panel');
+  p.style.display = 'flex';
+  setTimeout(() => p.classList.add('show'), 10);
+  renderSelBody();
+}
+function hideSelPanel(e) {
+  if (!e || e.target.id === 'sel-panel' || e.currentTarget?.className?.includes?.('sp-btn')) {
+    const p = document.getElementById('sel-panel');
+    p.classList.remove('show');
+    setTimeout(() => p.style.display = 'none', 300);
+  }
+}
 function renderSelBody() {
-  const selRows = allData.filter(r => selectedKeys.has(rowKey(r)));
-  const body = document.getElementById('sp-body');
-  body.innerHTML = selRows.map(r => `
-    <tr>
-      <td><div style="font-weight:400">${r['NOMBRE DE ESTABLECIMIENTO']}</div><div style="font-size:10px; color:var(--muted)">${r.tipo.toUpperCase()}</div></td>
-      <td>${r.DEPARTAMENTO}</td>
-      <td>${r.PROVINCIA}</td>
-      <td>${r['GRADO DE DIFICULTAD']}<br><span style="font-size:11px; color:var(--muted)">${r.CATEGORIA}</span></td>
-      <td style="font-size:11px; font-weight:400;">${r.PRESUPUESTO}</td>
-      <td style="font-weight:400;">ZAF: ${r['ZAF (*)']}<br>ZE: ${r['ZE (**)']}</td>
-      <td><strong>${r['N° PLAZAS']}</strong></td>
-      <td style="text-align:right"><button onclick="selectedKeys.delete('${rowKey(r)}'); updateSelectionUI(); renderSelBody(); render();" style="color:var(--red); background:none; border:none; cursor:pointer; font-size:16px;">✕</button></td>
-    </tr>
-  `).join('');
+  const rows = allData.filter(r => selectedKeys.has(rowKey(r)));
+  document.getElementById('sp-body').innerHTML = rows.map(r => {
+    const k = rowKey(r).replace(/'/g,"\\'");
+    return `<tr>
+      <td><div style="font-weight:600;font-size:13px">${r['NOMBRE DE ESTABLECIMIENTO']}</div><div style="font-size:11px;color:var(--muted)">${r.DISTRITO||''}</div></td>
+      <td><span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REM':'EQUIV'}</span></td>
+      <td style="font-size:12px">${r.DEPARTAMENTO}</td>
+      <td style="font-size:12px;color:var(--muted)">${r.PROVINCIA}</td>
+      <td><span class="badge ${gdBadgeClass(r['GRADO DE DIFICULTAD'])}">${r['GRADO DE DIFICULTAD']}</span><br><span style="font-size:10px;color:var(--muted)">${r.CATEGORIA}</span></td>
+      <td style="font-size:11px;font-family:var(--mono)">${r.PRESUPUESTO}</td>
+      <td style="font-size:11px;font-family:var(--mono)">ZAF:${r['ZAF (*)']}<br>ZE:${r['ZE (**)']}</td>
+      <td style="text-align:right;font-family:var(--mono);font-weight:700">${r['N° PLAZAS']}</td>
+      <td><button onclick="selectedKeys.delete('${k}');updateSelUI();renderSelBody();renderAll();" style="color:var(--red);background:none;border:none;cursor:pointer;font-size:18px;padding:0 4px">✕</button></td>
+    </tr>`;
+  }).join('');
 }
+function clearAllSelection() { selectedKeys.clear(); updateSelUI(); hideSelPanel(); renderAll(); }
 
-function clearAllSelection() { selectedKeys.clear(); updateSelectionUI(); hideSelPanel(); render(); }
-
+// ── PDF export (with colors) ──────────────────────────────────────────────
 function openPDFTab() {
   const rows = allData.filter(r => selectedKeys.has(rowKey(r)));
-  let html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:6px;text-align:left;font-size:11px}th{background:#f4f4f4}</style></head><body>`;
-  html += `<h2>Selecci&oacute;n de Plazas Medicina SERUMS 2025-I</h2><table><thead><tr><th>Establecimiento</th><th>Dpto</th><th>Prov</th><th>GD</th><th>Cat</th><th>Presupuesto</th><th>ZAF/ZE</th><th>Plz</th></tr></thead><tbody>`;
-  rows.forEach(r => html += `<tr><td>${r['NOMBRE DE ESTABLECIMIENTO']}</td><td>${r.DEPARTAMENTO}</td><td>${r.PROVINCIA}</td><td>${r['GRADO DE DIFICULTAD']}</td><td>${r.CATEGORIA}</td><td>${r.PRESUPUESTO}</td><td>ZAF:${r['ZAF (*)']}/ZE:${r['ZE (**)']}</td><td>${r['N° PLAZAS']}</td></tr>`);
+  const gdColor = { 'GD-1':'#059669','GD-2':'#2563eb','GD-3':'#d97706','GD-4':'#dc2626','GD-5':'#7c3aed' };
+  let html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; padding: 24px; color: #1a1a2e; background: #fff; }
+    h2 { font-size: 18px; margin-bottom: 4px; color: #1a1a2e; }
+    .sub { font-size: 11px; color: #888; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    th { background: #1a1f2e; color: #94a3b8; padding: 8px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+    .b-rem { background: #d1fae5; color: #065f46; }
+    .b-eqv { background: #dbeafe; color: #1e3a8a; }
+    .b-zaf { background: #fef3c7; color: #92400e; font-weight:700; }
+    .t-plz { font-weight: 700; font-size: 13px; color: #2563eb; }
+    @media print { body { padding: 12px; } }
+  </style></head><body>
+  <h2>Plazas Seleccionadas — Medicina SERUMS</h2>
+  <div class="sub">Generado el ${new Date().toLocaleDateString('es-PE', {day:'2-digit',month:'long',year:'numeric'})} · ${rows.length} establecimientos · ${rows.reduce((s,r)=>s+(parseInt(r['N° PLAZAS'])||0),0)} plazas totales</div>
+  <table><thead><tr><th>Establecimiento</th><th>Tipo</th><th>Dpto</th><th>Provincia</th><th>GD</th><th>Cat</th><th>Presupuesto</th><th>ZAF</th><th>ZE</th><th>Plz</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    const gc = gdColor[r['GRADO DE DIFICULTAD']] || '#555';
+    html += `<tr>
+      <td><strong>${r['NOMBRE DE ESTABLECIMIENTO']}</strong><br><span style="font-size:10px;color:#888">${r.DISTRITO||''}</span></td>
+      <td><span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REM':'EQUIV'}</span></td>
+      <td>${r.DEPARTAMENTO}</td><td style="color:#666">${r.PROVINCIA}</td>
+      <td><span style="background:${gc}22;color:${gc};padding:2px 7px;border-radius:4px;font-weight:700;font-size:10px">${r['GRADO DE DIFICULTAD']}</span></td>
+      <td style="font-size:10px">${r.CATEGORIA}</td>
+      <td style="font-size:10px;color:#555">${r.PRESUPUESTO}</td>
+      <td>${r['ZAF (*)'] === 'SI' ? '<span class="badge b-zaf">SI</span>' : ''}</td>
+      <td>${r['ZE (**)'] === 'SI' ? '<span class="badge b-zaf">SI</span>' : ''}</td>
+      <td class="t-plz">${r['N° PLAZAS']}</td>
+    </tr>`;
+  });
   html += `</tbody></table><script>window.onload=()=>window.print();<\/script></body></html>`;
-  const win = window.open('', '_blank');
-  win.document.write(html);
-  win.document.close();
+  const w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
 }
 
+// ── TXT export ────────────────────────────────────────────────────────────
 function exportTXT() {
   const rows = allData.filter(r => selectedKeys.has(rowKey(r)));
-  let txt = "PLAZAS SELECCIONADAS - MEDICINA 2025-I\n" + "=".repeat(40) + "\n\n";
+  let txt = "PLAZAS SELECCIONADAS - MEDICINA SERUMS\n" + "=".repeat(42) + "\n\n";
   rows.forEach((r, i) => {
     txt += `${i+1}. ${r['NOMBRE DE ESTABLECIMIENTO']} [${r.tipo.toUpperCase()}]\n`;
-    txt += `   Ubicación: ${r.DEPARTAMENTO} / ${r.PROVINCIA}\n`;
+    txt += `   ${r.DEPARTAMENTO} / ${r.PROVINCIA} / ${r.DISTRITO}\n`;
     txt += `   GD: ${r['GRADO DE DIFICULTAD']} | Cat: ${r.CATEGORIA} | Plazas: ${r['N° PLAZAS']}\n`;
     txt += `   Presupuesto: ${r.PRESUPUESTO} | ZAF: ${r['ZAF (*)']} | ZE: ${r['ZE (**)']}\n\n`;
   });
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([txt], {type: 'text/plain'}));
+  a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain'}));
   a.download = 'mis_plazas_serums.txt';
   a.click();
 }
 
-function resetFilters() { document.querySelectorAll('select').forEach(s => s.selectedIndex = 0); applyFilters(); }
 function showYape() { document.getElementById('yape-overlay').classList.add('show'); }
 function hideYape(e) { if (!e || e.target.id === 'yape-overlay' || e.target.tagName === 'BUTTON') document.getElementById('yape-overlay').classList.remove('show'); }
 
@@ -421,4 +722,3 @@ loadInitialFiles();
 </script>
 </body>
 </html>
-```
