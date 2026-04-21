@@ -352,8 +352,8 @@ function parseCSV(text) {
     vals.push(cur.trim());
     const obj = {};
     headers.forEach((h, i) => obj[h] = (vals[i]||'').trim());
-    obj['ZAF (*)'] = obj['ZAF (*)'] || obj['ZAF'] || '';
-    obj['ZE (**)'] = obj['ZE (**)'] || obj['ZE']  || '';
+    <td class="t-zaf">${r['ZAF (*)'] === 'SI' ? '✦ SI' : ''}</td>
+      <td class="t-zaf">${r['ZE (**)'] === 'SI' ? '✦ SI' : ''}</td>
     return obj;
   });
 }
