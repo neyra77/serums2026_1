@@ -547,8 +547,8 @@ function renderRows(chunk) {
       <td class="t-mono">${gdBadge}</td>
       <td class="t-mono">${r.CATEGORIA||'—'}</td>
       <td class="t-pres">${r.PRESUPUESTO||'—'}</td>
-      <td class="t-zaf">${r['ZAF (*)'] === 'SI' ? '✦' : ''}</td>
-      <td class="t-zaf">${r['ZE (**)'] === 'SI' ? '✦' : ''}</td>
+      <td class="t-zaf">${r['ZAF (*)'] === 'SI' ? 'SI ✦' : ''}</td>
+      <td class="t-zaf">${r['ZE (**)'] === 'SI' ? 'SI ✦' : ''}</td>
       <td class="t-plz">${r['N° PLAZAS']||'—'}</td>
       <td class="t-chk"><input type="checkbox" ${sel?'checked':''} readonly onclick="event.stopPropagation()"></td>`;
     frag.appendChild(tr);
