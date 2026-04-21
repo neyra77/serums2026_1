@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -51,26 +52,28 @@
   .stat .val { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--accent); }
   #btn-view-sel { font-family: var(--mono); font-size: 11px; font-weight: 600; background: var(--accent); color: #fff; border: none; border-radius: 5px; padding: 6px 12px; cursor: pointer; }
 
-  #table-wrap { flex: 1; overflow: auto; padding: 0 32px; } /* Increased side padding */
-  table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1300px; margin: 0 auto; }
+  #table-wrap { flex: 1; overflow: auto; padding: 0 32px; } 
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1350px; margin: 0 auto; }
   thead th { position: sticky; top: 0; z-index: 10; background: #1a1f2e; padding: 12px; text-align: left; font-family: var(--mono); font-size: 10px; color: var(--muted); border-bottom: 2px solid var(--border); cursor: pointer; }
   
-  .col-tipo { width: 85px; }
+  /* Column widths adjusted for new order */
+  .col-plz  { width: 85px; }
   .col-est  { width: 280px; }
+  .col-tipo { width: 95px; }
+  .col-gd   { width: 60px; }
   .col-dep  { width: 110px; }
   .col-prov { width: 110px; }
-  .col-gd   { width: 70px; }
+  .col-dist { width: 110px; }
+  .col-pres { width: 130px; }
   .col-cat  { width: 70px; }
-  .col-pres { width: 140px; }
   .col-zaf  { width: 55px; }
   .col-ze   { width: 55px; }
-  .col-plz  { width: 95px; }
   .col-chk  { width: 50px; text-align: center; }
 
   tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; }
   tbody tr:hover { background: rgba(255,255,255,0.02); }
   tbody tr.sel-row { background: var(--selection-bg); }
-  td { padding: 10px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.78rem; } /* Applied requested font-size */
+  td { padding: 10px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.78rem; }
 
   #sel-panel { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 350; display: none; align-items: flex-end; transition: background 0.3s ease; }
   #sel-panel.show { display: flex; background: rgba(0,0,0,0.7); }
@@ -83,13 +86,17 @@
   .yape-card { background: var(--surface); padding: 32px; border-radius: 24px; text-align: center; border: 1px solid var(--border); max-width: 340px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
   
   .badge { padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 10px; font-weight: 600; }
-  .b-rem { background: rgba(16,185,129,0.15); color: #10b981; }
-  .b-eqv { background: rgba(59,130,246,0.15);  color: #3b82f6; }
   
-  /* GD Badges */
-  .bgd-1 { background: rgba(16,185,129,0.1); color: #10b981; }
-  .bgd-2 { background: rgba(245,158,11,0.1); color: #f59e0b; }
-  .bgd-3 { background: rgba(239,68,68,0.1); color: #ef4444; }
+  /* Tipo Badges Updated */
+  .b-remun { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+  .b-equiv { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+  
+  /* GD Badges Updated */
+  .b-gd1 { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+  .b-gd2 { background: rgba(59,130,246,0.12); color: #93c5fd; }
+  .b-gd3 { background: rgba(245,158,11,0.12); color: #fcd34d; }
+  .b-gd4 { background: rgba(239,68,68,0.12);  color: #fca5a5; }
+  .b-gd5 { background: rgba(139,92,246,0.12); color: #c4b5fd; }
 </style>
 </head>
 <body>
@@ -120,8 +127,10 @@
   </div>
 
   <div id="stats-bar">
-    <div class="stat"><span class="lbl">Lugares</span><span class="val" id="s-total">0</span></div>
+    <div class="stat"><span class="lbl">Establecimientos</span><span class="val" id="s-total">0</span></div>
     <div class="stat"><span class="lbl">Número de Plazas</span><span class="val" id="s-plazas" style="color:var(--green)">0</span></div>
+    <div class="stat"><span class="lbl">Remunerado</span><span class="val" id="s-rem" style="color:#10b981">0</span></div>
+    <div class="stat"><span class="lbl">Equivalente</span><span class="val" id="s-eq" style="color:#3b82f6">0</span></div>
     <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
       <span style="font-family:var(--mono); font-size:11px; color:var(--muted);">Seleccionadas: <b id="sel-n">0</b></span>
       <button id="btn-view-sel" onclick="showSelPanel()">Ver Selección ↑</button>
@@ -132,16 +141,17 @@
     <table>
       <thead>
         <tr>
-          <th class="col-tipo" onclick="sortBy('tipo')">Tipo</th>
+          <th class="col-plz" onclick="sortBy('N° PLAZAS')">N. Plazas</th>
           <th class="col-est" onclick="sortBy('NOMBRE DE ESTABLECIMIENTO')">Establecimiento</th>
-          <th class="col-dep" onclick="sortBy('DEPARTAMENTO')">Dpto</th>
-          <th class="col-prov" onclick="sortBy('PROVINCIA')">Provincia</th>
+          <th class="col-tipo" onclick="sortBy('tipo')">Modalidad</th>
           <th class="col-gd" onclick="sortBy('GRADO DE DIFICULTAD')">GD</th>
-          <th class="col-cat" onclick="sortBy('CATEGORIA')">Cat.</th>
+          <th class="col-dep" onclick="sortBy('DEPARTAMENTO')">Departamento</th>
+          <th class="col-prov" onclick="sortBy('PROVINCIA')">Provincia</th>
+          <th class="col-dist" onclick="sortBy('DISTRITO')">Distrito</th>
           <th class="col-pres" onclick="sortBy('PRESUPUESTO')">Presupuesto</th>
+          <th class="col-cat" onclick="sortBy('CATEGORIA')">Cat.</th>
           <th class="col-zaf" onclick="sortBy('ZAF (*)')">ZAF</th>
           <th class="col-ze" onclick="sortBy('ZE (**)')">ZE</th>
-          <th class="col-plz" onclick="sortBy('N° PLAZAS')">N. Plazas</th>
           <th class="col-chk"><input type="checkbox" id="master-chk" onclick="toggleAllFiltered(event)"></th>
         </tr>
       </thead>
@@ -323,6 +333,8 @@ function render() {
   body.innerHTML = '';
   document.getElementById('s-total').textContent = filtered.length;
   document.getElementById('s-plazas').textContent = filtered.reduce((s,r) => s + (parseInt(r['N° PLAZAS'])||0), 0);
+  document.getElementById('s-rem').textContent = filtered.filter(r=>r.tipo==='rem').length;
+  document.getElementById('s-eq').textContent = filtered.filter(r=>r.tipo==='equiv').length;
 
   filtered.slice(0, 250).forEach(r => {
     const isSel = selectedKeys.has(rowKey(r));
@@ -330,21 +342,23 @@ function render() {
     if (isSel) tr.className = 'sel-row';
     tr.onclick = () => toggleRow(r);
     
-    // GD Highlight Logic
     const gd = r['GRADO DE DIFICULTAD'];
-    const gdClass = gd === '1' ? 'bgd-1' : (gd === '2' ? 'bgd-2' : 'bgd-3');
+    const gdClass = `b-gd${gd}`;
+    const tipoLabel = r.tipo === 'rem' ? 'REMUN' : 'EQUIV';
+    const tipoClass = r.tipo === 'rem' ? 'b-remun' : 'b-equiv';
 
     tr.innerHTML = `
-      <td><span class="badge ${r.tipo === 'rem' ? 'b-rem' : 'b-eqv'}">${r.tipo.toUpperCase()}</span></td>
-      <td title="${r['NOMBRE DE ESTABLECIMIENTO']}" style="color:var(--muted)">${r['NOMBRE DE ESTABLECIMIENTO']}</td>
-      <td>${r.DEPARTAMENTO}</td>
-      <td style="color:var(--muted)">${r.PROVINCIA}</td>
+      <td style="color:var(--accent)">${r['N° PLAZAS']}</td>
+      <td title="${r['NOMBRE DE ESTABLECIMIENTO']}" style="font-weight:700">${r['NOMBRE DE ESTABLECIMIENTO']}</td>
+      <td><span class="badge ${tipoClass}">${tipoLabel}</span></td>
       <td><span class="badge ${gdClass}">${gd}</span></td>
+      <td style="color:var(--text)">${r.DEPARTAMENTO}</td>
+      <td style="color:var(--muted)">${r.PROVINCIA}</td>
+      <td style="color:var(--muted)">${r.DISTRITO}</td>
+      <td style="font-weight:700">${r.PRESUPUESTO}</td>
       <td>${r.CATEGORIA}</td>
-      <td style="color:var(--muted)">${r.PRESUPUESTO}</td>
       <td style="color:var(--amber)">${r['ZAF (*)'] === 'SI' ? 'SI' : ''}</td>
       <td style="color:var(--amber)">${r['ZE (**)'] === 'SI' ? 'SI' : ''}</td>
-      <td style="font-weight:700; color:var(--accent)">${r['N° PLAZAS']}</td>
       <td class="col-chk"><input type="checkbox" ${isSel ? 'checked' : ''} readonly></td>
     `;
     body.appendChild(tr);
@@ -407,3 +421,4 @@ loadInitialFiles();
 </script>
 </body>
 </html>
+```
