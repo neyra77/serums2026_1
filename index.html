@@ -36,7 +36,7 @@
   .logo { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); white-space: nowrap; }
   .header-title { flex: 1; min-width: 0; }
   .header-title h1 { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em; }
-  .src-link { color: var(--muted); font-size: 11px; font-family: var(--mono); text-decoration: none; white-space: nowrap; }
+  .src-link { color: var(--text); font-size: 12px; font-weight: 700; font-family: var(--mono); text-decoration: none; white-space: nowrap; }
   .src-link:hover { color: var(--text); }
   .yape-btn { display: flex; align-items: center; gap: 5px; border: 1px solid rgba(168,85,247,0.4); border-radius: 6px; padding: 5px 10px; cursor: pointer; background: rgba(168,85,247,0.1); transition: background 0.2s; white-space: nowrap; }
   .yape-btn span { font-family: var(--mono); font-size: 10px; font-weight: 600; color: #d8b4fe; }
@@ -109,7 +109,7 @@
   .col-gd   { width: 55px; }
   .col-cat  { width: 65px; }
   .col-pres { width: 130px; }
-  .col-zaf  { width: 50px; }
+  .col-zaf  { width: 50px; text-align: center;}
   .col-ze   { width: 50px; }
   .col-plz  { width: 80px; }
   .col-chk  { width: 46px; text-align: center; }
@@ -537,7 +537,7 @@ function renderRows(chunk) {
     const tr = document.createElement('tr');
     if (sel) tr.className = 'sel-row';
     tr.onclick = () => toggleRow(r);
-    const tipoBadge = `<span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REM':'EQUIV'}</span>`;
+    const tipoBadge = `<span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REMUN':'EQUIV'}</span>`;
     const gdBadge   = r['GRADO DE DIFICULTAD'] ? `<span class="badge ${gdBadgeClass(r['GRADO DE DIFICULTAD'])}">${r['GRADO DE DIFICULTAD']}</span>` : '—';
     tr.innerHTML = `
       <td>${tipoBadge}</td>
@@ -622,7 +622,7 @@ function renderSelBody() {
     const k = rowKey(r).replace(/'/g,"\\'");
     return `<tr>
       <td><div style="font-weight:600;font-size:13px">${r['NOMBRE DE ESTABLECIMIENTO']}</div><div style="font-size:11px;color:var(--muted)">${r.DISTRITO||''}</div></td>
-      <td><span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REM':'EQUIV'}</span></td>
+      <td><span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REMUN':'EQUIV'}</span></td>
       <td style="font-size:12px">${r.DEPARTAMENTO}</td>
       <td style="font-size:12px;color:var(--muted)">${r.PROVINCIA}</td>
       <td><span class="badge ${gdBadgeClass(r['GRADO DE DIFICULTAD'])}">${r['GRADO DE DIFICULTAD']}</span><br><span style="font-size:10px;color:var(--muted)">${r.CATEGORIA}</span></td>
@@ -661,7 +661,7 @@ function openPDFTab() {
     const gc = gdColor[r['GRADO DE DIFICULTAD']] || '#555';
     html += `<tr>
       <td><strong>${r['NOMBRE DE ESTABLECIMIENTO']}</strong><br><span style="font-size:10px;color:#888">${r.DISTRITO||''}</span></td>
-      <td><span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REM':'EQUIV'}</span></td>
+      <td><span class="badge ${r.tipo==='rem'?'b-rem':'b-eqv'}">${r.tipo==='rem'?'REMUN':'EQUIV'}</span></td>
       <td>${r.DEPARTAMENTO}</td><td style="color:#666">${r.PROVINCIA}</td>
       <td><span style="background:${gc}22;color:${gc};padding:2px 7px;border-radius:4px;font-weight:700;font-size:10px">${r['GRADO DE DIFICULTAD']}</span></td>
       <td style="font-size:10px">${r.CATEGORIA}</td>
