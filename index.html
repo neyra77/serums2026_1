@@ -28,12 +28,10 @@
   html, body { height: 100%; overflow: hidden; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; }
 
-  /* ════ SPINNER ════ */
   #load-zone { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); z-index: 300; gap: 14px; }
   .spinner { border: 3px solid var(--border); border-top: 3px solid var(--accent); border-radius: 50%; width: 32px; height: 32px; animation: spin 0.9s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ════ HEADER ════ */
   header { height: var(--header-h); background: var(--surface); border-bottom: 1px solid var(--border); display: none; align-items: center; padding: 0 16px; gap: 12px; position: fixed; top: 0; left: 0; right: 0; z-index: 200; }
   .logo { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); white-space: nowrap; }
   .header-title { flex: 1; min-width: 0; }
@@ -44,16 +42,13 @@
   .yape-btn span { font-family: var(--mono); font-size: 10px; font-weight: 600; color: #d8b4fe; }
   @media (max-width: 600px) { .logo { display: none; } .src-link { display: none; } }
 
-  /* ════ APP SHELL ════ */
   #app { display: none; flex-direction: column; position: fixed; inset: 0; padding-top: var(--header-h); }
 
-  /* ════ MOBILE SEARCH ════ */
   #mobile-search { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 12px 0; }
   #mobile-search input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--sans); font-size: 16px; padding: 10px 14px; outline: none; -webkit-appearance: none; transition: border-color 0.15s; }
   #mobile-search input:focus { border-color: var(--accent); }
   @media (max-width: 768px) { #mobile-search { display: block; } }
 
-  /* ════ QUICK CHIPS ════ */
   #quick-chips { display: none; padding: 8px 12px 10px; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; gap: 6px; }
   #quick-chips::-webkit-scrollbar { display: none; }
   .qchip { display: inline-flex; align-items: center; font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--muted); white-space: nowrap; touch-action: manipulation; transition: all 0.15s; user-select: none; }
@@ -68,7 +63,6 @@
   .qchip.active.c-zaf  { background: #b45309; }
   @media (max-width: 768px) { #quick-chips { display: flex; } }
 
-  /* ════ FILTER TOGGLE (mobile) ════ */
   #filter-toggle { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 16px; align-items: center; justify-content: space-between; cursor: pointer; touch-action: manipulation; }
   #filter-toggle .ft-l { font-size: 13px; font-weight: 600; }
   #filter-toggle .ft-r { display: flex; align-items: center; gap: 8px; }
@@ -77,7 +71,6 @@
   #f-arrow.open { transform: rotate(180deg); }
   @media (max-width: 768px) { #filter-toggle { display: flex; } }
 
-  /* ════ FILTER BAR ════ */
   #filter-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
   @media (min-width: 769px) { #filter-bar { max-height: 200px !important; } }
   @media (max-width: 768px) { #filter-bar { max-height: 0; padding-top: 0; padding-bottom: 0; } #filter-bar.open { max-height: 400px; padding: 12px 16px; } }
@@ -89,7 +82,6 @@
   .btn-reset:hover, .btn-reset:active { border-color: var(--red); color: var(--red); }
   @media (max-width: 768px) { .fg { min-width: calc(50% - 5px); flex: 1 1 calc(50% - 5px); } .btn-reset { width: 100%; } }
 
-  /* ════ STATS BAR ════ */
   #stats-bar { background: var(--bg); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; gap: 20px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 0; }
   #stats-bar::-webkit-scrollbar { display: none; }
   .stat { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
@@ -99,7 +91,6 @@
   #sel-count-lbl { font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
   #btn-view-sel { font-family: var(--mono); font-size: 11px; font-weight: 600; background: var(--accent); color: #fff; border: none; border-radius: 5px; padding: 6px 12px; cursor: pointer; touch-action: manipulation; white-space: nowrap; }
 
-  /* ════ TABLE (desktop) ════ */
   #table-wrap { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; }
   table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1100px; font-size: 13px; }
   thead th { position: sticky; top: 0; z-index: 10; background: #1a1f2e; padding: 10px 12px; text-align: left; font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border); cursor: pointer; white-space: nowrap; user-select: none; transition: color 0.15s; }
@@ -131,7 +122,6 @@
 
   @media (max-width: 768px) { table, thead, tbody, tr, th, td { display: none !important; } }
 
-  /* ════ MOBILE CARDS ════ */
   .m-card { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 16px; cursor: pointer; transition: background 0.1s; }
   .m-card.sel-row { background: var(--sel-bg); border-left: 3px solid var(--green); }
   .m-card:active { background: rgba(59,130,246,0.07); }
@@ -148,7 +138,6 @@
   @media (max-width: 768px) { .m-card { display: block; } }
   @media (min-width: 769px) { .m-card { display: none !important; } }
 
-  /* ════ BADGES ════ */
   .badge { padding: 2px 7px; border-radius: 4px; font-family: var(--mono); font-size: 11px; font-weight: 600; }
   .b-rem { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
   .b-eqv { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
@@ -158,7 +147,6 @@
   .b-gd4 { background: rgba(239,68,68,0.12);  color: #fca5a5; }
   .b-gd5 { background: rgba(139,92,246,0.12); color: #c4b5fd; }
 
-  /* ════ SEL PANEL ════ */
   #sel-panel { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 350; display: none; align-items: flex-end; transition: background 0.3s; }
   #sel-panel.show { display: flex; background: rgba(0,0,0,0.72); }
   .sp-inner { background: var(--surface); width: 100%; max-height: 85vh; border-radius: 16px 16px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
@@ -176,7 +164,6 @@
   .sp-table th { padding: 10px 12px; font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; border-bottom: 1px solid var(--border); text-align: left; }
   .sp-table td { padding: 10px 12px; border-bottom: 1px solid rgba(37,42,54,0.6); vertical-align: middle; }
 
-  /* ════ YAPE OVERLAY ════ */
   #yape-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
   #yape-overlay.show { display: flex; }
   .yc { background: var(--surface); padding: 32px; border-radius: 20px; text-align: center; border: 1px solid var(--border); max-width: 320px; width: 100%; }
@@ -209,12 +196,10 @@
 
 <div id="app">
 
-  <!-- Mobile search -->
   <div id="mobile-search">
     <input type="text" id="f-search-mobile" placeholder="🔍  Buscar establecimiento o distrito..." autocomplete="off" autocorrect="off" spellcheck="false">
   </div>
 
-  <!-- Quick chips -->
   <div id="quick-chips">
     <span class="qchip c-rem" onclick="toggleChip(this,'tipo','rem')">Remunerado</span>
     <span class="qchip c-eqv" onclick="toggleChip(this,'tipo','equiv')">Equivalente</span>
@@ -226,7 +211,6 @@
     <span class="qchip c-zaf" onclick="toggleChip(this,'zaf','SI')">ZAF ✦</span>
   </div>
 
-  <!-- Filter toggle -->
   <div id="filter-toggle" onclick="toggleFilters()">
     <span class="ft-l">⚙ Filtros avanzados</span>
     <div class="ft-r">
@@ -235,7 +219,6 @@
     </div>
   </div>
 
-  <!-- Filter bar -->
   <div id="filter-bar">
     <div class="fg"><label>Tipo</label>
       <select id="f-tipo"><option value="">Todos</option><option value="rem">Remunerado</option><option value="equiv">Equivalente</option></select>
@@ -250,19 +233,20 @@
     <button class="btn-reset" onclick="resetFilters()">✕ Limpiar</button>
   </div>
 
-  <!-- Stats bar -->
   <div id="stats-bar">
     <div class="stat"><span class="lbl">Lugares</span><span class="val" id="s-total">0</span></div>
+    <div class="stat"><span class="lbl">↳ Remun</span><span class="val" id="s-total-rem" style="color:var(--green)">0</span></div>
+    <div class="stat"><span class="lbl">↳ Equiv</span><span class="val" id="s-total-eqv" style="color:var(--accent)">0</span></div>
     <div class="stat"><span class="lbl">N° Plazas</span><span class="val" id="s-plazas" style="color:var(--green)">0</span></div>
+    <div class="stat"><span class="lbl">↳ Remun</span><span class="val" id="s-plazas-rem" style="color:var(--green)">0</span></div>
+    <div class="stat"><span class="lbl">↳ Equiv</span><span class="val" id="s-plazas-eqv" style="color:var(--accent)">0</span></div>
     <div id="sel-controls">
       <span id="sel-count-lbl">Sel: <b id="sel-n">0</b></span>
       <button id="btn-view-sel" onclick="showSelPanel()">Ver selección ↑</button>
     </div>
   </div>
 
-  <!-- Content area -->
   <div id="table-wrap">
-    <!-- Desktop table -->
     <table id="data-table">
       <thead><tr>
         <th class="col-tipo" onclick="sortBy('tipo')" data-col="tipo">Tipo</th>
@@ -279,13 +263,11 @@
       </tr></thead>
       <tbody id="table-body"></tbody>
     </table>
-    <!-- Mobile cards -->
     <div id="cards-body"></div>
     <div id="no-results">Sin resultados para los filtros seleccionados.</div>
   </div>
 </div>
 
-<!-- Selection panel -->
 <div id="sel-panel" onclick="hideSelPanel(event)">
   <div class="sp-inner" onclick="event.stopPropagation()">
     <div class="sp-hdr">
@@ -311,7 +293,6 @@
   </div>
 </div>
 
-<!-- Yape overlay -->
 <div id="yape-overlay" onclick="hideYape(event)">
   <div class="yc" onclick="event.stopPropagation()">
     <p>Si te fue útil, apóyame con<br><strong>0.50 o 1 sol</strong> por Yape 💜</p>
@@ -329,7 +310,6 @@ let sortCol = 'DEPARTAMENTO', sortDir = 1;
 let filtersOpen = false;
 const chipState = { tipo: null, gd: null, zaf: null };
 
-// ── Load ─────────────────────────────────────────────────────────────────
 async function loadInitialFiles() {
   const files = [
     { name: 'medicina_remunerado_plazas.csv', tipo: 'rem' },
@@ -399,7 +379,6 @@ function attachListeners() {
   });
 }
 
-// ── Chips ─────────────────────────────────────────────────────────────────
 function toggleChip(el, type, value) {
   if (chipState[type] === value) {
     chipState[type] = null;
@@ -415,7 +394,6 @@ function toggleChip(el, type, value) {
   applyFilters();
 }
 
-// ── Filter toggle ─────────────────────────────────────────────────────────
 function toggleFilters() {
   filtersOpen = !filtersOpen;
   document.getElementById('filter-bar').classList.toggle('open', filtersOpen);
@@ -427,7 +405,6 @@ function countActive() {
     .filter(id => document.getElementById(id).value !== '').length;
 }
 
-// ── Filters ───────────────────────────────────────────────────────────────
 function applyFilters() {
   const tipo = document.getElementById('f-tipo').value;
   const dep  = document.getElementById('f-dep').value;
@@ -468,7 +445,6 @@ function resetFilters() {
   applyFilters();
 }
 
-// ── Sort ─────────────────────────────────────────────────────────────────
 function sortBy(col) {
   sortDir = sortCol === col ? -sortDir : 1;
   sortCol = col;
@@ -488,10 +464,16 @@ function sortData() {
   });
 }
 
-// ── Stats ─────────────────────────────────────────────────────────────────
 function updateStats() {
-  document.getElementById('s-total').textContent = filtered.length.toLocaleString();
-  document.getElementById('s-plazas').textContent = filtered.reduce((s,r) => s + (parseInt(r['N° PLAZAS'])||0), 0).toLocaleString();
+  const rem = filtered.filter(r => r.tipo === 'rem');
+  const eqv = filtered.filter(r => r.tipo === 'equiv');
+  const plazas = arr => arr.reduce((s,r) => s + (parseInt(r['N° PLAZAS'])||0), 0);
+  document.getElementById('s-total').textContent      = filtered.length.toLocaleString();
+  document.getElementById('s-total-rem').textContent  = rem.length.toLocaleString();
+  document.getElementById('s-total-eqv').textContent  = eqv.length.toLocaleString();
+  document.getElementById('s-plazas').textContent     = plazas(filtered).toLocaleString();
+  document.getElementById('s-plazas-rem').textContent = plazas(rem).toLocaleString();
+  document.getElementById('s-plazas-eqv').textContent = plazas(eqv).toLocaleString();
 }
 
 function updateSelUI() {
@@ -500,7 +482,6 @@ function updateSelUI() {
   document.getElementById('sp-cnt').textContent = n;
 }
 
-// ── Row key ───────────────────────────────────────────────────────────────
 function rowKey(r) { return `${r.tipo}-${r['CODIGO RENIPRESS MODULAR']}-${r['NOMBRE DE ESTABLECIMIENTO']}`; }
 
 function toggleRow(r) {
@@ -518,7 +499,6 @@ function toggleAllFiltered(e) {
   renderAll();
 }
 
-// ── Render ────────────────────────────────────────────────────────────────
 const PAGE = 200;
 let page = 0;
 
@@ -542,7 +522,6 @@ function gdBadgeClass(gd) {
   return {'GD-1':'b-gd1','GD-2':'b-gd2','GD-3':'b-gd3','GD-4':'b-gd4','GD-5':'b-gd5'}[gd]||'';
 }
 
-// Desktop rows
 function renderRows(chunk) {
   const frag = document.createDocumentFragment();
   chunk.forEach(r => {
@@ -569,7 +548,6 @@ function renderRows(chunk) {
   document.getElementById('table-body').appendChild(frag);
 }
 
-// Mobile cards
 function renderCards(chunk) {
   const frag = document.createDocumentFragment();
   chunk.forEach((r, idx) => {
@@ -598,7 +576,7 @@ function renderCards(chunk) {
         <div class="mf"><span class="mfl">Cód. RENIPRESS</span><span class="mfv" style="font-family:var(--mono);font-size:12px">${r['CODIGO RENIPRESS MODULAR']||'—'}</span></div>
         <div class="mf" style="grid-column:1/-1">
           <span class="mfl">Seleccionar</span>
-          <button onclick="event.stopPropagation();toggleRow(${JSON.stringify(r).replace(/"/g,'&quot;')})" 
+          <button onclick="event.stopPropagation();toggleRow(${JSON.stringify(r).replace(/"/g,'&quot;')})"
             style="margin-top:4px;padding:8px 16px;border-radius:6px;border:1px solid ${sel?'var(--red)':'var(--green)'};background:${sel?'rgba(239,68,68,0.1)':'rgba(16,185,129,0.1)'};color:${sel?'var(--red)':'var(--green)'};font-weight:600;font-size:12px;cursor:pointer;touch-action:manipulation">
             ${sel ? '✕ Quitar' : '+ Seleccionar'}
           </button>
@@ -612,7 +590,6 @@ function renderCards(chunk) {
   document.getElementById('cards-body').appendChild(frag);
 }
 
-// Infinite scroll
 document.getElementById('table-wrap').addEventListener('scroll', function() {
   if (this.scrollTop + this.clientHeight >= this.scrollHeight - 150) {
     if ((page+1)*PAGE < filtered.length) { page++; renderPage(false); }
@@ -625,7 +602,6 @@ window.addEventListener('resize', () => {
   if (now !== lastMobile) { lastMobile = now; renderAll(); }
 });
 
-// ── Selection panel ───────────────────────────────────────────────────────
 function showSelPanel() {
   const p = document.getElementById('sel-panel');
   p.style.display = 'flex';
@@ -658,7 +634,6 @@ function renderSelBody() {
 }
 function clearAllSelection() { selectedKeys.clear(); updateSelUI(); hideSelPanel(); renderAll(); }
 
-// ── PDF export (with colors) ──────────────────────────────────────────────
 function openPDFTab() {
   const rows = allData.filter(r => selectedKeys.has(rowKey(r)));
   const gdColor = { 'GD-1':'#059669','GD-2':'#2563eb','GD-3':'#d97706','GD-4':'#dc2626','GD-5':'#7c3aed' };
@@ -701,7 +676,6 @@ function openPDFTab() {
   w.document.close();
 }
 
-// ── TXT export ────────────────────────────────────────────────────────────
 function exportTXT() {
   const rows = allData.filter(r => selectedKeys.has(rowKey(r)));
   let txt = "PLAZAS SELECCIONADAS - MEDICINA SERUMS\n" + "=".repeat(42) + "\n\n";
