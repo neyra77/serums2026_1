@@ -575,13 +575,12 @@ function renderCards(chunk) {
         <span class="mc-chip" style="background:rgba(255,255,255,0.06);color:var(--text)">${r.DEPARTAMENTO||''}</span>
         <span class="mc-chip" style="background:rgba(255,255,255,0.04);color:var(--muted)">${r.PRESUPUESTO||''}</span>
         ${r['ZAF (*)'] === 'SI' ? `<span class="mc-chip" style="background:rgba(245,158,11,0.12);color:#fcd34d">ZAF ✦</span>` : ''}
-        ${r['ZE (**)'] === 'SI' ? `<span class="mc-chip" style="background:rgba(245,158,11,0.12);color:#fcd34d">ZE ✦</span>` : ''}
+        ${r['ZE (**)'] === 'SI' ? `<span class="mc-chip" style="background:#7c3aed;color:#fff">ZE ✦</span>` : ''}
       </div>
       <div class="mc-detail hidden" id="${detId}">
         <div class="mf"><span class="mfl">Provincia</span><span class="mfv">${r.PROVINCIA||'—'}</span></div>
         <div class="mf"><span class="mfl">Distrito</span><span class="mfv">${r.DISTRITO||'—'}</span></div>
         <div class="mf"><span class="mfl">Categoría</span><span class="mfv">${r.CATEGORIA||'—'}</span></div>
-        <div class="mf"><span class="mfl">Cód. RENIPRESS</span><span class="mfv" style="font-family:var(--mono);font-size:12px">${r['CODIGO RENIPRESS MODULAR']||'—'}</span></div>
       </div>`;
     card.addEventListener('click', () => {
       document.getElementById(detId).classList.toggle('hidden');
