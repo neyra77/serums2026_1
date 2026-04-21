@@ -27,7 +27,6 @@
   html, body { height: 100%; overflow: hidden; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; }
 
-  /* ════ LOADING STATE ════ */
   #load-zone { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); z-index: 300; }
   .spinner { border: 3px solid var(--border); border-top: 3px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 15px; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -42,7 +41,6 @@
 
   #app { display: none; flex-direction: column; position: fixed; inset: 0; padding-top: var(--header-h); }
   
-  /* ════ FILTERS ════ */
   #filter-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
   .filter-group { display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
   .filter-group label { font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase; }
@@ -53,26 +51,26 @@
   .stat .val { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--accent); }
   #btn-view-sel { font-family: var(--mono); font-size: 11px; font-weight: 600; background: var(--accent); color: #fff; border: none; border-radius: 5px; padding: 6px 12px; cursor: pointer; }
 
-  #table-wrap { flex: 1; overflow: auto; padding: 0 16px; }
-  table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1300px; }
+  #table-wrap { flex: 1; overflow: auto; padding: 0 32px; } /* Increased side padding */
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1300px; margin: 0 auto; }
   thead th { position: sticky; top: 0; z-index: 10; background: #1a1f2e; padding: 12px; text-align: left; font-family: var(--mono); font-size: 10px; color: var(--muted); border-bottom: 2px solid var(--border); cursor: pointer; }
   
   .col-tipo { width: 85px; }
   .col-est  { width: 280px; }
   .col-dep  { width: 110px; }
   .col-prov { width: 110px; }
-  .col-gd   { width: 55px; }
+  .col-gd   { width: 70px; }
   .col-cat  { width: 70px; }
   .col-pres { width: 140px; }
   .col-zaf  { width: 55px; }
   .col-ze   { width: 55px; }
-  .col-plz  { width: 90px; }
+  .col-plz  { width: 95px; }
   .col-chk  { width: 50px; text-align: center; }
 
   tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; }
   tbody tr:hover { background: rgba(255,255,255,0.02); }
   tbody tr.sel-row { background: var(--selection-bg); }
-  td { padding: 10px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13px; }
+  td { padding: 10px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.78rem; } /* Applied requested font-size */
 
   #sel-panel { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 350; display: none; align-items: flex-end; transition: background 0.3s ease; }
   #sel-panel.show { display: flex; background: rgba(0,0,0,0.7); }
@@ -87,6 +85,11 @@
   .badge { padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 10px; font-weight: 600; }
   .b-rem { background: rgba(16,185,129,0.15); color: #10b981; }
   .b-eqv { background: rgba(59,130,246,0.15);  color: #3b82f6; }
+  
+  /* GD Badges */
+  .bgd-1 { background: rgba(16,185,129,0.1); color: #10b981; }
+  .bgd-2 { background: rgba(245,158,11,0.1); color: #f59e0b; }
+  .bgd-3 { background: rgba(239,68,68,0.1); color: #ef4444; }
 </style>
 </head>
 <body>
@@ -113,7 +116,7 @@
     <div class="filter-group"><label>GD</label><select id="f-gd"><option value="">Todos</option></select></div>
     <div class="filter-group"><label>Presupuesto</label><select id="f-pres"><option value="">Todos</option></select></div>
     <div class="filter-group"><label>ZAF</label><select id="f-zaf"><option value="">Todos</option><option value="SI">SI</option><option value="NO">NO</option></select></div>
-    <button style="background:none; border:1px solid var(--border); color:var(--muted); padding:8px 12px; border-radius:6px; cursor:pointer; font-size:11px;" onclick="resetFilters()">Limpiar Filtros</button>
+    <button style="background:none; border:1px solid var(--border); color:var(--muted); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px;" onclick="resetFilters()">Limpiar Filtros</button>
   </div>
 
   <div id="stats-bar">
@@ -138,7 +141,7 @@
           <th class="col-pres" onclick="sortBy('PRESUPUESTO')">Presupuesto</th>
           <th class="col-zaf" onclick="sortBy('ZAF (*)')">ZAF</th>
           <th class="col-ze" onclick="sortBy('ZE (**)')">ZE</th>
-          <th class="col-plz" onclick="sortBy('N° PLAZAS')">N° Plazas</th>
+          <th class="col-plz" onclick="sortBy('N° PLAZAS')">N. Plazas</th>
           <th class="col-chk"><input type="checkbox" id="master-chk" onclick="toggleAllFiltered(event)"></th>
         </tr>
       </thead>
@@ -192,7 +195,6 @@
 let allData = [], filtered = [], selectedKeys = new Set();
 let sortCol = 'DEPARTAMENTO', sortDir = 1;
 
-// ── AUTOMATIC LOADING LOGIC ──────────────────────────────────────────
 async function loadInitialFiles() {
   const files = [
     { name: 'medicina_remunerado_plazas.csv', type: 'rem' },
@@ -327,14 +329,19 @@ function render() {
     const tr = document.createElement('tr');
     if (isSel) tr.className = 'sel-row';
     tr.onclick = () => toggleRow(r);
+    
+    // GD Highlight Logic
+    const gd = r['GRADO DE DIFICULTAD'];
+    const gdClass = gd === '1' ? 'bgd-1' : (gd === '2' ? 'bgd-2' : 'bgd-3');
+
     tr.innerHTML = `
       <td><span class="badge ${r.tipo === 'rem' ? 'b-rem' : 'b-eqv'}">${r.tipo.toUpperCase()}</span></td>
-      <td title="${r['NOMBRE DE ESTABLECIMIENTO']}">${r['NOMBRE DE ESTABLECIMIENTO']}</td>
+      <td title="${r['NOMBRE DE ESTABLECIMIENTO']}" style="color:var(--muted)">${r['NOMBRE DE ESTABLECIMIENTO']}</td>
       <td>${r.DEPARTAMENTO}</td>
-      <td>${r.PROVINCIA}</td>
-      <td>${r['GRADO DE DIFICULTAD']}</td>
+      <td style="color:var(--muted)">${r.PROVINCIA}</td>
+      <td><span class="badge ${gdClass}">${gd}</span></td>
       <td>${r.CATEGORIA}</td>
-      <td style="color:var(--muted); font-size:11px;">${r.PRESUPUESTO}</td>
+      <td style="color:var(--muted)">${r.PRESUPUESTO}</td>
       <td style="color:var(--amber)">${r['ZAF (*)'] === 'SI' ? 'SI' : ''}</td>
       <td style="color:var(--amber)">${r['ZE (**)'] === 'SI' ? 'SI' : ''}</td>
       <td style="font-weight:700; color:var(--accent)">${r['N° PLAZAS']}</td>
@@ -352,12 +359,12 @@ function renderSelBody() {
   const body = document.getElementById('sp-body');
   body.innerHTML = selRows.map(r => `
     <tr>
-      <td><div style="font-weight:600">${r['NOMBRE DE ESTABLECIMIENTO']}</div><div style="font-size:10px; color:var(--muted)">${r.tipo.toUpperCase()}</div></td>
+      <td><div style="font-weight:400">${r['NOMBRE DE ESTABLECIMIENTO']}</div><div style="font-size:10px; color:var(--muted)">${r.tipo.toUpperCase()}</div></td>
       <td>${r.DEPARTAMENTO}</td>
       <td>${r.PROVINCIA}</td>
       <td>${r['GRADO DE DIFICULTAD']}<br><span style="font-size:11px; color:var(--muted)">${r.CATEGORIA}</span></td>
-      <td style="font-size:11px">${r.PRESUPUESTO}</td>
-      <td>ZAF: ${r['ZAF (*)']}<br>ZE: ${r['ZE (**)']}</td>
+      <td style="font-size:11px; font-weight:400;">${r.PRESUPUESTO}</td>
+      <td style="font-weight:400;">ZAF: ${r['ZAF (*)']}<br>ZE: ${r['ZE (**)']}</td>
       <td><strong>${r['N° PLAZAS']}</strong></td>
       <td style="text-align:right"><button onclick="selectedKeys.delete('${rowKey(r)}'); updateSelectionUI(); renderSelBody(); render();" style="color:var(--red); background:none; border:none; cursor:pointer; font-size:16px;">✕</button></td>
     </tr>
@@ -396,7 +403,6 @@ function resetFilters() { document.querySelectorAll('select').forEach(s => s.sel
 function showYape() { document.getElementById('yape-overlay').classList.add('show'); }
 function hideYape(e) { if (!e || e.target.id === 'yape-overlay' || e.target.tagName === 'BUTTON') document.getElementById('yape-overlay').classList.remove('show'); }
 
-// Start
 loadInitialFiles();
 </script>
 </body>
