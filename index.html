@@ -235,11 +235,9 @@
 
   <div id="stats-bar">
     <div class="stat"><span class="lbl">Lugares</span><span class="val" id="s-total">0</span></div>
-    <div class="stat"><span class="lbl">↳ Remun</span><span class="val" id="s-total-rem" style="color:var(--green)">0</span></div>
-    <div class="stat"><span class="lbl">↳ Equiv</span><span class="val" id="s-total-eqv" style="color:var(--accent)">0</span></div>
     <div class="stat"><span class="lbl">N° Plazas</span><span class="val" id="s-plazas" style="color:var(--green)">0</span></div>
-    <div class="stat"><span class="lbl">↳ Remun</span><span class="val" id="s-plazas-rem" style="color:var(--green)">0</span></div>
-    <div class="stat"><span class="lbl">↳ Equiv</span><span class="val" id="s-plazas-eqv" style="color:var(--accent)">0</span></div>
+    <div class="stat"><span class="lbl">Remunerado</span><span class="val" id="s-plazas-rem" style="color:var(--green)">0</span></div>
+    <div class="stat"><span class="lbl">Equivalente</span><span class="val" id="s-plazas-eqv" style="color:var(--accent)">0</span></div>
     <div id="sel-controls">
       <span id="sel-count-lbl">Sel: <b id="sel-n">0</b></span>
       <button id="btn-view-sel" onclick="showSelPanel()">Ver selección ↑</button>
@@ -469,8 +467,6 @@ function updateStats() {
   const eqv = filtered.filter(r => r.tipo === 'equiv');
   const plazas = arr => arr.reduce((s,r) => s + (parseInt(r['N° PLAZAS'])||0), 0);
   document.getElementById('s-total').textContent      = filtered.length.toLocaleString();
-  document.getElementById('s-total-rem').textContent  = rem.length.toLocaleString();
-  document.getElementById('s-total-eqv').textContent  = eqv.length.toLocaleString();
   document.getElementById('s-plazas').textContent     = plazas(filtered).toLocaleString();
   document.getElementById('s-plazas-rem').textContent = plazas(rem).toLocaleString();
   document.getElementById('s-plazas-eqv').textContent = plazas(eqv).toLocaleString();
