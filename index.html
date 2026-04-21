@@ -191,7 +191,7 @@
 
 <header id="main-header">
   <div class="logo">SERUMS 2026-I</div>
-  <div class="header-title"><h1>Explorador de Plazas — SERUMS 2026-1</h1></div>
+  <div class="header-title"><h1>SERUMS 2026-1 Explorador de Plazas </h1></div>
   <a class="src-link" href="https://www.gob.pe/institucion/minsa/informes-publicaciones/8040039-oferta-de-plazas-serums-remuneradas-y-equivalentes-2026-i" target="_blank">Fuente MINSA ↗</a>
   <div class="yape-btn" onclick="showYape()">
     <span style="font-size:14px;">💜</span>
@@ -578,13 +578,6 @@ function renderCards(chunk) {
         <div class="mf"><span class="mfl">Distrito</span><span class="mfv">${r.DISTRITO||'—'}</span></div>
         <div class="mf"><span class="mfl">Categoría</span><span class="mfv">${r.CATEGORIA||'—'}</span></div>
         <div class="mf"><span class="mfl">Cód. RENIPRESS</span><span class="mfv" style="font-family:var(--mono);font-size:12px">${r['CODIGO RENIPRESS MODULAR']||'—'}</span></div>
-        <div class="mf" style="grid-column:1/-1">
-          <span class="mfl">Seleccionar</span>
-          <button onclick="event.stopPropagation();toggleRow(${JSON.stringify(r).replace(/"/g,'&quot;')})"
-            style="margin-top:4px;padding:8px 16px;border-radius:6px;border:1px solid ${sel?'var(--red)':'var(--green)'};background:${sel?'rgba(239,68,68,0.1)':'rgba(16,185,129,0.1)'};color:${sel?'var(--red)':'var(--green)'};font-weight:600;font-size:12px;cursor:pointer;touch-action:manipulation">
-            ${sel ? '✕ Quitar' : '+ Seleccionar'}
-          </button>
-        </div>
       </div>`;
     card.addEventListener('click', () => {
       document.getElementById(detId).classList.toggle('hidden');
