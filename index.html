@@ -35,7 +35,7 @@
   header { height: var(--header-h); background: var(--surface); border-bottom: 1px solid var(--border); display: none; align-items: center; padding: 0 16px; gap: 12px; position: fixed; top: 0; left: 0; right: 0; z-index: 200; }
   .logo { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); white-space: nowrap; }
   .header-title { flex: 1; min-width: 0; }
-  .header-title h1 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-title h1 { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em; }
   .src-link { color: var(--muted); font-size: 11px; font-family: var(--mono); text-decoration: none; white-space: nowrap; }
   .src-link:hover { color: var(--text); }
   .yape-btn { display: flex; align-items: center; gap: 5px; border: 1px solid rgba(168,85,247,0.4); border-radius: 6px; padding: 5px 10px; cursor: pointer; background: rgba(168,85,247,0.1); transition: background 0.2s; white-space: nowrap; }
@@ -191,7 +191,7 @@
 
 <header id="main-header">
   <div class="logo">SERUMS 2026-I</div>
-  <div class="header-title"><h1>SERUMS 2026-1 Explorador de Plazas </h1></div>
+  <div class="header-title"><h1>SERUMS 2026-I · Plazas Medicina</h1></div>
   <a class="src-link" href="https://www.gob.pe/institucion/minsa/informes-publicaciones/8040039-oferta-de-plazas-serums-remuneradas-y-equivalentes-2026-i" target="_blank">Fuente MINSA ↗</a>
   <div class="yape-btn" onclick="showYape()">
     <span style="font-size:14px;">💜</span>
@@ -225,6 +225,9 @@
   </div>
 
   <div id="filter-bar">
+    <div class="fg" style="min-width:220px"><label>Buscar</label>
+      <input type="text" id="f-search-desktop" placeholder="Establecimiento o distrito..." autocomplete="off" autocorrect="off" spellcheck="false" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--sans);font-size:14px;padding:8px 10px;height:38px;outline:none;width:100%;">
+    </div>
     <div class="fg"><label>Tipo</label>
       <select id="f-tipo"><option value="">Todos</option><option value="rem">Remunerado</option><option value="equiv">Equivalente</option></select>
     </div>
@@ -377,6 +380,7 @@ function populateSelects() {
 }
 
 function attachListeners() {
+  document.getElementById('f-search-desktop').addEventListener('input', applyFilters);
   ['f-tipo','f-dep','f-gd','f-pres','f-cat','f-zaf'].forEach(id =>
     document.getElementById(id).onchange = applyFilters
   );
@@ -418,7 +422,7 @@ function applyFilters() {
   const pres = document.getElementById('f-pres').value;
   const cat  = document.getElementById('f-cat').value;
   const zaf  = document.getElementById('f-zaf').value;
-  const q    = document.getElementById('f-search-mobile').value.trim().toUpperCase();
+  const q    = (document.getElementById('f-search-mobile').value || document.getElementById('f-search-desktop').value).trim().toUpperCase();
 
   filtered = allData.filter(r =>
     (!tipo || r.tipo === tipo) &&
